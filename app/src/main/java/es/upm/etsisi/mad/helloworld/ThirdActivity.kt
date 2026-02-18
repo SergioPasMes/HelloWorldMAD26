@@ -29,8 +29,7 @@ class ThirdActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        Log.i(TAG, "Created activity $TAG")
-        Log.d(TAG, "Created activity $TAG")
+        Log.d(TAG, "Starting activity $TAG")
         Log.i(TAG, "Setting up $TAG")
         Log.w(TAG, "A warning popped in $TAG")
         Log.e(TAG, "An error occurred in $TAG")

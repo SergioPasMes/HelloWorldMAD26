@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private val TAG = this::class.toString()
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
+    private var latestLocation: Location? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             insets
         }
 
-        Log.d(TAG, "Created activity $TAG")
+        Log.d(TAG, "Starting activity $TAG")
         Log.i(TAG, "Setting up $TAG")
         Log.w(TAG, "A warning popped in $TAG")
         Log.e(TAG, "An error occurred in $TAG")
@@ -42,6 +43,19 @@ class MainActivity : AppCompatActivity(), LocationListener {
             Log.i(TAG, "Transitioning to SecondActivity")
             val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent)
+        }
+
+        val buttonOsm: Button = findViewById(R.id.osmButton)
+        buttonOsm.setOnClickListener {
+            if (latestLocation != null) {
+                val intent = Intent(this, OpenStreetMapActivity::class.java)
+                val bundle = Bundle()
+                bundle.putParcelable("location", latestLocation)
+                intent.putExtra("locationBundle", bundle)
+                startActivity(intent)
+            } else {
+                Log.e(TAG, "Location is not yet set")
+            }
         }
 
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
@@ -71,6 +85,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     override fun onLocationChanged(location: Location) {
         val textView : TextView = findViewById(R.id.mainTextView)
         textView.text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
+        this.latestLocation = location;
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
