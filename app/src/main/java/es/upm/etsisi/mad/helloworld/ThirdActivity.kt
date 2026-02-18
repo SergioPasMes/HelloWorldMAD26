@@ -30,5 +30,10 @@ class ThirdActivity : AppCompatActivity() {
         }
 
         Log.i(TAG, "Created activity $TAG")
+        Log.d(TAG, "Created activity $TAG")
+        Log.i(TAG, "Setting up $TAG")
+        Log.w(TAG, "A warning popped in $TAG")
+        Log.e(TAG, "An error occurred in $TAG")
+        Log.wtf(TAG, "Assertion error in $TAG")
     }
 }
