@@ -41,6 +41,6 @@ application development.
 
 ## Screenshots of the App
 
-| ![App view](readme/MainActivity.png "Main activity") | ![App view](readme/SecondActivity.png "Second activity") | ![App view](readme/ThirdActivity.png "Third activity") |
-|:----------------------------------------------------:|:--------------------------------------------------------:|:------------------------------------------------------:|
-|                   *Main Activity*                    |                    *Second Activity*                     |                    *Third Activity*                    |
+| ![App view](readme/MainActivity.png "Main activity") | ![App view](readme/OpenStreetMapsActivity.png "OpenStreetMaps activity") | ![App view](readme/SecondActivity.png "Second activity") | ![App view](readme/ThirdActivity.png "Third activity") |
+|:----------------------------------------------------:|:------------------------------------------------------------------------:|:--------------------------------------------------------:|:-------------------------------------------------------:
+|                   *Main Activity*                    |                          *OpenStreetMaps Activity*                       |                    *Second Activity*                     |                  *Third Activity*                      |
