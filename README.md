@@ -32,11 +32,14 @@ application development.
 - Created `SecondActivity` and `ThirdActivity`.
 - Added basic navigation system between activities.
 
+### Week 3 ([release](https://github.com/bt0385/HelloWorldMAD26/releases/tag/w3.2026))
+- Added capability to show latitude and longitude of current location in `MainActivity`.
+- Added logging in `MainActivity`, `SecondActivity` and `ThirdActivity`.
+- Created `OpenStretMapsActivity`, which shows in a map, with a marker, your current location.
+- Added markers in UPM buildings (see in OpenStreetMaps).
 
-## Screenshots
-| ![Main Activity](readme/MainActivityCode.png "Main activity code") |
-|:------------------------------------------------------------------:|
-|                         *MainActivity.kt*                          |
+
+## Screenshots of the App
 
 | ![App view](readme/MainActivity.png "Main activity") | ![App view](readme/SecondActivity.png "Second activity") | ![App view](readme/ThirdActivity.png "Third activity") |
 |:----------------------------------------------------:|:--------------------------------------------------------:|:------------------------------------------------------:|
