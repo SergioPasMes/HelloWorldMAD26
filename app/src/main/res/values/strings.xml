@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">HelloWorld</string>
+
+    <string name="landing_activity_header">Welcome to %1s!</string>
+    <string name="landing_activity_profile_create_message">Complete your profile to get started.</string>
+    <string name="landing_activity_username_hint">Username</string>
+    <string name="landing_activity_username_error_too_long">Username may not be longer than %1d characters</string>
+    <string name="landing_activity_username_error_too_short">Username must be at least %1d characters long</string>
+    <string name="landing_activity_username_error_missing">Username is required</string>
+    <string name="landing_activity_age_hint">Age (years)</string>
+    <string name="landing_activity_age_error_negative">Age may not be a negative number</string>
+    <string name="landing_activity_age_error_too_low">You must be at least %1d years old</string>
+    <string name="landing_activity_age_error_too_high">Age may not exceed %1d years</string>
+    <string name="landing_activity_age_error_missing">Age is required</string>
+    <string name="landing_activity_confirm_button">Create profile</string>
+    <string name="landing_activity_toast_profile_created">Profile created successfully</string>
 </resources>
