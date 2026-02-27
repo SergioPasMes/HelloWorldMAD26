@@ -1,41 +1,40 @@
-package es.upm.etsisi.mad.helloworld;
+package es.upm.etsisi.mad.helloworld
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Context
+import android.content.SharedPreferences
 
-public class ProfilePreferences {
-    private static final String profilePreferences = "UserSession";
+object ProfilePreferences {
+    private const val fileName = "UserProfile"
+    private const val keyAlias = "alias"
+    private const val keyAge = "age"
+    private const val keyPicturePath = "profile_picture"
 
-    private static final String keyAlias = "alias";
-    private static final String keyAge = "age";
-    private static final String keyPicturePath = "profile_picture";
 
-    private static SharedPreferences getPrefs(Context context) {
-        return context.getSharedPreferences(profilePreferences, Context.MODE_PRIVATE);
+    private fun getPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
     }
 
-
-    public static String getAlias(Context context) {
-        return getPrefs(context).getString(keyAlias, "");
+    fun getAlias(context: Context): String {
+        return getPreferences(context).getString(keyAlias, "") ?: ""
     }
 
-    public static int getAge(Context context) {
-        return getPrefs(context).getInt(keyAge, 0);
+    fun getAge(context: Context): Int {
+        return getPreferences(context).getInt(keyAge, 0)
     }
 
-    public static String getProfilePicture(Context context) {
-        return getPrefs(context).getString(keyPicturePath, "");
+    fun getProfilePic(context: Context): String {
+        return getPreferences(context).getString(keyPicturePath, "") ?: ""
     }
 
-    public static void setAlias(Context context, String alias) {
-        getPrefs(context).edit().putString(keyAlias, alias).apply();
+    fun setAlias(context: Context, alias: String) {
+        getPreferences(context).edit().putString(keyAlias, alias).apply()
     }
 
-    public static void setAge(Context context, int age) {
-        getPrefs(context).edit().putInt(keyAge, age).apply();
+    fun setAge(context: Context, age: Int) {
+        getPreferences(context).edit().putInt(keyAge, age).apply()
     }
 
-    public static void setProfilePicture(Context context, String path) {
-        getPrefs(context).edit().putString(keyPicturePath, path).apply();
+    fun setProfilePic(context: Context, path: String) {
+        getPreferences(context).edit().putString(keyPicturePath, path).apply()
     }
 }
