@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -80,6 +81,12 @@ class LandingActivity : AppCompatActivity() {
 
             ProfilePreferences.setAlias(this, username)
             ProfilePreferences.setAge(this, age!!)
+
+            Toast.makeText(
+                this,
+                getString(R.string.landing_activity_toast_profile_created),
+                Toast.LENGTH_LONG
+            ).show()
 
             switchToMainActivity()
         }
