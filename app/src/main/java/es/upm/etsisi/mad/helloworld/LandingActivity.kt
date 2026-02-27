@@ -14,6 +14,12 @@ import androidx.core.view.WindowInsetsCompat
 class LandingActivity : AppCompatActivity() {
     private val TAG = this::class.toString()
 
+    private val USERNAME_MIN_LENGTH = 3
+    private val USERNAME_MAX_LENGTH = 16
+
+    private val AGE_MIN = 16
+    private val AGE_MAX = 100
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,14 +55,19 @@ class LandingActivity : AppCompatActivity() {
         val username = getUsernameInput()
         val age = getAgeInput()
 
-        Log.i(TAG, "Saving preferences:")
-        Log.i(TAG, "    Username:   $username")
-        Log.i(TAG, "    Age:        $age")
+        val usernameOkay = checkUsernameAndShowError(username)
+        val ageOkay = checkAgeAndShowError(age)
 
-        ProfilePreferences.setAlias(this, username)
-        ProfilePreferences.setAge(this, age!!)
+        if(usernameOkay && ageOkay) {
+            Log.i(TAG, "Saving preferences:")
+            Log.i(TAG, "    Username:   $username")
+            Log.i(TAG, "    Age:        $age")
 
-        switchToMainActivity()
+            ProfilePreferences.setAlias(this, username)
+            ProfilePreferences.setAge(this, age!!)
+
+            switchToMainActivity()
+        }
     }
 
     /**
@@ -77,5 +88,66 @@ class LandingActivity : AppCompatActivity() {
             0 -> null
             else -> Integer.parseInt(input.text.toString())
         }
+    }
+
+    /**
+     * Checks whether the username meets the criteria. If not, shows an error.
+     *
+     * @return `true` if the value meets the criteria, `false` otherwise.
+     */
+    private fun checkUsernameAndShowError(username: String): Boolean {
+        val error = when {
+            username.isEmpty() -> getString(R.string.landing_activity_username_error_missing)
+
+            username.length < USERNAME_MIN_LENGTH ->
+                getString(R.string.landing_activity_username_error_too_short)
+                    .format(USERNAME_MIN_LENGTH)
+
+            username.length > USERNAME_MAX_LENGTH ->
+                getString(R.string.landing_activity_username_error_too_long)
+                    .format(USERNAME_MAX_LENGTH)
+
+            else -> null
+        }
+
+        if(error == null) {
+            return true
+        }
+
+        val input = findViewById<EditText>(R.id.username_input)
+        input.error = error
+        return false
+    }
+
+    /**
+     * Checks whether the age meets the criteria. If not, shows an error.
+     *
+     * @return `true` if the value meets the criteria, `false` otherwise.
+     */
+    private fun checkAgeAndShowError(age: Int?): Boolean {
+        val error = when {
+            age == null -> getString(R.string.landing_activity_age_error_missing)
+
+            age < 0 ->
+                getString(R.string.landing_activity_age_error_negative)
+
+            age < AGE_MIN ->
+                getString(R.string.landing_activity_age_error_too_low)
+                    .format(AGE_MIN)
+
+            age > AGE_MAX ->
+                getString(R.string.landing_activity_age_error_too_high)
+                    .format(AGE_MAX)
+
+            else -> null
+        }
+
+        if(error == null) {
+            return true
+        }
+
+        val input = findViewById<EditText>(R.id.age_input)
+        input.error = error
+        return false
     }
 }
