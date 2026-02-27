@@ -30,6 +30,13 @@ class LandingActivity : AppCompatActivity() {
             insets
         }
 
+        // Check whether to show the activity or directly transition to MainActivity.
+        if(isProfileConfigured()) {
+            Log.i(TAG, "Profile has already been configured, transitioning to `MainActivity`")
+            switchToMainActivity()
+            return
+        }
+
         // Update the app name in the welcome string.
         val welcomeTextWidget = findViewById<TextView>(R.id.welcome_text_header)
         val welcomeTextString = welcomeTextWidget.text.toString().format(getString(R.string.app_name))
@@ -37,6 +44,14 @@ class LandingActivity : AppCompatActivity() {
 
         val confirmButton = findViewById<Button>(R.id.confirm_button)
         confirmButton.setOnClickListener { onConfirmPressed() }
+    }
+
+    /**
+     * Checks whether the user profile has been configured.
+     */
+    private fun isProfileConfigured(): Boolean {
+        // Assume that, if the alias is configured, so is the profile.
+        return ProfilePreferences.getAlias(this) != ""
     }
 
     /**
