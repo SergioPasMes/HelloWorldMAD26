@@ -1,10 +1,12 @@
 package es.upm.etsisi.mad.helloworld
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -20,6 +22,8 @@ class LandingActivity : AppCompatActivity() {
 
     private val AGE_MIN = 16
     private val AGE_MAX = 100
+
+    private var currentPfp: ProfilePicture? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +47,9 @@ class LandingActivity : AppCompatActivity() {
         val welcomeTextString = welcomeTextWidget.text.toString().format(getString(R.string.app_name))
         welcomeTextWidget.text = welcomeTextString
 
+        val pfpView = findViewById<ImageView>(R.id.pfp)
+        pfpView.setOnClickListener { openProfilePictureDialog() }
+
         val confirmButton = findViewById<Button>(R.id.confirm_button)
         confirmButton.setOnClickListener { onConfirmPressed() }
     }
@@ -65,6 +72,19 @@ class LandingActivity : AppCompatActivity() {
     }
 
     /**
+     * Opens the profile picture picker dialog.
+     */
+    private fun openProfilePictureDialog() {
+        val profilePictures = ProfilePictureManager.getAllImages(this)
+        ProfilePicturePickerManager(this, profilePictures) { chosenPfp ->
+            currentPfp = chosenPfp
+            val pfpView = findViewById<ImageView>(R.id.pfp)
+            val bitmap = BitmapFactory.decodeByteArray(chosenPfp.image, 0, chosenPfp.image.size)
+            pfpView.setImageBitmap(bitmap)
+        }.show()
+    }
+
+    /**
      * Executed when the confirm button is pressed.
      */
     private fun onConfirmPressed() {
@@ -78,9 +98,13 @@ class LandingActivity : AppCompatActivity() {
             Log.i(TAG, "Saving preferences:")
             Log.i(TAG, "    Username:   $username")
             Log.i(TAG, "    Age:        $age")
+            Log.i(TAG, "    Picture:    ${currentPfp?.name ?: "(none)"}")
 
             ProfilePreferences.setAlias(this, username)
             ProfilePreferences.setAge(this, age!!)
+            currentPfp?.let {
+                ProfilePreferences.setProfilePic(this, it.name)
+            }
 
             Toast.makeText(
                 this,
