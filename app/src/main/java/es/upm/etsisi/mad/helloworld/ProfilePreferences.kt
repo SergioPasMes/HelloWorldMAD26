@@ -4,6 +4,14 @@ import android.content.Context
 import android.content.SharedPreferences
 
 object ProfilePreferences {
+
+    const val USERNAME_MIN_LENGTH = 3
+    const val USERNAME_MAX_LENGTH = 16
+
+    const val AGE_MIN = 16
+    const val AGE_MAX = 100
+    const val DEFAULT_PFP = "pfp_0.png"
+
     private const val fileName = "UserProfile"
     private const val keyAlias = "alias"
     private const val keyAge = "age"

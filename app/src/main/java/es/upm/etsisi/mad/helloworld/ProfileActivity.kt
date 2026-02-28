@@ -102,13 +102,18 @@ NavigationView.OnNavigationItemSelectedListener {
 
         builder.setPositiveButton("OK") { dialog, which ->
             val inputAlias = input.text.toString()
-            if (inputAlias.isNotBlank() && inputAlias.length <= 20) {
+            if (inputAlias.length in ProfilePreferences.USERNAME_MIN_LENGTH..ProfilePreferences.USERNAME_MAX_LENGTH) {
                 val currentAlias = findViewById<TextView>(R.id.userAlias)
                 currentAlias.text = inputAlias
                 ProfilePreferences.setAlias(this, inputAlias)
                 Toast.makeText(this, "Alias updated", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Alias cannot be empty or above 20 characters", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Alias must be between ${ProfilePreferences.USERNAME_MIN_LENGTH} " +
+                            "and ${ProfilePreferences.USERNAME_MAX_LENGTH} characters",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
         builder.setNegativeButton("Cancel") { dialog, which ->
@@ -128,13 +133,17 @@ NavigationView.OnNavigationItemSelectedListener {
         builder.setPositiveButton("OK") { dialog, which ->
             val stringAge = input.text.toString()
             val inputAge = stringAge.toIntOrNull()
-            if (inputAge != null && inputAge in 1..100) {
+            if (inputAge != null && inputAge in ProfilePreferences.AGE_MIN..ProfilePreferences.AGE_MAX) {
                 val currentAge = findViewById<TextView>(R.id.userAge)
                 currentAge.text = stringAge
                 ProfilePreferences.setAge(this, inputAge)
                 Toast.makeText(this, "Age updated", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Age value must be between 1 and 100", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Age value must be between ${ProfilePreferences.AGE_MIN} and ${ProfilePreferences.AGE_MAX}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
         builder.setNegativeButton("Cancel") { dialog, which ->

@@ -17,12 +17,6 @@ import androidx.core.view.WindowInsetsCompat
 class LandingActivity : AppCompatActivity() {
     private val TAG = this::class.toString()
 
-    private val USERNAME_MIN_LENGTH = 3
-    private val USERNAME_MAX_LENGTH = 16
-
-    private val AGE_MIN = 16
-    private val AGE_MAX = 100
-
     private var currentPfp: ProfilePicture? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -145,13 +139,13 @@ class LandingActivity : AppCompatActivity() {
         val error = when {
             username.isEmpty() -> getString(R.string.landing_activity_username_error_missing)
 
-            username.length < USERNAME_MIN_LENGTH ->
+            username.length < ProfilePreferences.USERNAME_MIN_LENGTH ->
                 getString(R.string.landing_activity_username_error_too_short)
-                    .format(USERNAME_MIN_LENGTH)
+                    .format(ProfilePreferences.USERNAME_MIN_LENGTH)
 
-            username.length > USERNAME_MAX_LENGTH ->
+            username.length > ProfilePreferences.USERNAME_MAX_LENGTH ->
                 getString(R.string.landing_activity_username_error_too_long)
-                    .format(USERNAME_MAX_LENGTH)
+                    .format(ProfilePreferences.USERNAME_MAX_LENGTH)
 
             else -> null
         }
@@ -177,13 +171,13 @@ class LandingActivity : AppCompatActivity() {
             age < 0 ->
                 getString(R.string.landing_activity_age_error_negative)
 
-            age < AGE_MIN ->
+            age < ProfilePreferences.AGE_MIN ->
                 getString(R.string.landing_activity_age_error_too_low)
-                    .format(AGE_MIN)
+                    .format(ProfilePreferences.AGE_MIN)
 
-            age > AGE_MAX ->
+            age > ProfilePreferences.AGE_MAX ->
                 getString(R.string.landing_activity_age_error_too_high)
-                    .format(AGE_MAX)
+                    .format(ProfilePreferences.AGE_MAX)
 
             else -> null
         }
