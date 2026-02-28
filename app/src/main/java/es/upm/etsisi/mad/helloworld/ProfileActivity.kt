@@ -2,7 +2,9 @@ package es.upm.etsisi.mad.helloworld
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
@@ -22,19 +24,21 @@ class ProfileActivity : AppCompatActivity(),
 NavigationView.OnNavigationItemSelectedListener {
 
     private val avatarMap = mapOf(
-        "default_avatar" to R.drawable.default_avatar,
-        "avatar1" to R.drawable.avatar1,
-        "avatar2" to R.drawable.avatar2,
-        "avatar3" to R.drawable.avatar3
+        "default_avatar" to R.drawable.home_icon, // CHANGE "home_icon" TO "default_avatar"
+        "avatar1" to R.drawable.location_icon,
+        "avatar2" to R.drawable.profile_icon,
+        "avatar3" to R.drawable.ic_launcher_foreground
     )
 
     private lateinit var drawerLayout: DrawerLayout
+
+    private var latestLocation: Location? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_second)
+        setContentView(R.layout.activity_profile)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -53,9 +57,9 @@ NavigationView.OnNavigationItemSelectedListener {
         val resId = if (savedName.isNotBlank()) {
             resources.getIdentifier(savedName, "drawable", packageName)
         } else {
-            R.drawable.default_avatar
+            R.drawable.home_icon  // CHANGE "home_icon" TO "default_avatar"
         }
-        avatarImage.setImageResource(if (resId != 0) resId else R.drawable.default_avatar)
+        avatarImage.setImageResource(if (resId != 0) resId else R.drawable.home_icon) // CHANGE "home_icon" TO "default_avatar"
 
         showCurrentProfileData()
 
@@ -85,7 +89,7 @@ NavigationView.OnNavigationItemSelectedListener {
         ageText.text = if (savedAge > 0) savedAge.toString() else "Set Age"
 
         val savedImageName = ProfilePreferences.getProfilePic(this)
-        val resId = avatarMap[savedImageName] ?: R.drawable.default_avatar
+        val resId = avatarMap[savedImageName] ?: R.drawable.home_icon // CHANGE TO "home_icon" to "default_avatar"
         avatarImage.setImageResource(resId)
     }
 
@@ -165,25 +169,28 @@ NavigationView.OnNavigationItemSelectedListener {
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_home -> {
-                // Already in home
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
             }
 
-            R.id.nav_second_activity -> {
-                val intent = Intent(this, SecondActivity::class.java)
-                startActivity(intent)
+            R.id.nav_profile_activity -> {
+                // Already in profile
             }
 
             R.id.nav_open_street_map -> {
-                val intent = Intent(this, OpenStreetMapsActivity::class.java)
-                val bundle = Bundle()
-                bundle.putParcelable("location", latestLocation)
-                intent.putExtra("locationBundle", bundle)
+                val intent = Intent(this, OpenStreetMapActivity::class.java)
                 startActivity(intent)
-            }
-
-            R.id.nav_settings -> {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
+                /* NEED TO FIX FOR WEEK 5
+                if (latestLocation != null) {
+                    val intent = Intent(this, OpenStreetMapActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putParcelable("location", latestLocation)
+                    intent.putExtra("locationBundle", bundle)
+                    startActivity(intent)
+                } else {
+                    Log.e(TAG, "Location is not yet set")
+                }
+                */
             }
         }
 

@@ -97,12 +97,12 @@ class MainActivity : AppCompatActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_home -> {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+                // Already in home
             }
 
             R.id.nav_profile_activity -> {
-                // Already in Profile
+                val intent = Intent(this, ProfileActivity::class.java)
+                startActivity(intent)
             }
 
             R.id.nav_open_street_map -> {
