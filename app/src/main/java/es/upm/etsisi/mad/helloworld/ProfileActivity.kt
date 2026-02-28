@@ -3,7 +3,7 @@ package es.upm.etsisi.mad.helloworld
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.GridView
@@ -12,10 +12,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
 
-class SecondActivity : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity(),
+NavigationView.OnNavigationItemSelectedListener {
 
     private val avatarMap = mapOf(
         "default_avatar" to R.drawable.default_avatar,
@@ -24,16 +28,23 @@ class SecondActivity : AppCompatActivity() {
         "avatar3" to R.drawable.avatar3
     )
 
+    private lateinit var drawerLayout: DrawerLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_second)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        navView.setNavigationItemSelectedListener(this)
 
         val avatarImage = findViewById<ImageView>(R.id.avatarImage)
         val savedName = ProfilePreferences.getProfilePic(this)
@@ -149,5 +160,34 @@ class SecondActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_home -> {
+                // Already in home
+            }
+
+            R.id.nav_second_activity -> {
+                val intent = Intent(this, SecondActivity::class.java)
+                startActivity(intent)
+            }
+
+            R.id.nav_open_street_map -> {
+                val intent = Intent(this, OpenStreetMapsActivity::class.java)
+                val bundle = Bundle()
+                bundle.putParcelable("location", latestLocation)
+                intent.putExtra("locationBundle", bundle)
+                startActivity(intent)
+            }
+
+            R.id.nav_settings -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 }
