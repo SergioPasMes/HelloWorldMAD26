@@ -1,6 +1,7 @@
 package es.upm.etsisi.mad.helloworld
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +15,12 @@ import java.io.IOException
 /**
  * Class representing a profile picture.
  */
-data class ProfilePicture(val name: String, val image: ByteArray)
+data class ProfilePicture(val name: String, val image: ByteArray) {
+    /**
+     * Returns the contents of this image as a Bitmap.
+     */
+    fun toBitmap(): Bitmap = BitmapFactory.decodeByteArray(image, 0, image.size)
+}
 
 /**
  * Allows for easy access to buil-in profile pictures.
@@ -102,8 +108,7 @@ class ProfilePicturePickerManager(
             layout.setOnClickListener { onImageSelect?.invoke(image) }
 
             val imageView = layout.findViewById<ImageView>(R.id.pfp_imageview)
-            val bitmap = BitmapFactory.decodeByteArray(image.image, 0, image.image.size)
-            imageView.setImageBitmap(bitmap)
+            imageView.setImageBitmap(image.toBitmap())
 
             return layout
         }

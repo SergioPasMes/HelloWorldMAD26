@@ -72,9 +72,8 @@ class LandingActivity : AppCompatActivity() {
         val profilePictures = ProfilePictureManager.getAllImages(this)
         ProfilePicturePickerManager(this, profilePictures) { chosenPfp ->
             currentPfp = chosenPfp
-            val pfpView = findViewById<ImageView>(R.id.pfp)
-            val bitmap = BitmapFactory.decodeByteArray(chosenPfp.image, 0, chosenPfp.image.size)
-            pfpView.setImageBitmap(bitmap)
+            findViewById<ImageView>(R.id.pfp)
+                .setImageBitmap(chosenPfp.toBitmap())
         }.show()
     }
 
