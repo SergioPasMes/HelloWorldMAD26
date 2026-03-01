@@ -4,11 +4,9 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
-import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -22,13 +20,6 @@ import com.google.android.material.navigation.NavigationView
 
 class ProfileActivity : AppCompatActivity(),
 NavigationView.OnNavigationItemSelectedListener {
-
-    private val avatarMap = mapOf(
-        "default_avatar" to R.drawable.home_icon, // CHANGE "home_icon" TO "default_avatar"
-        "avatar1" to R.drawable.location_icon,
-        "avatar2" to R.drawable.profile_icon,
-        "avatar3" to R.drawable.ic_launcher_foreground
-    )
 
     private lateinit var drawerLayout: DrawerLayout
 
@@ -51,15 +42,11 @@ NavigationView.OnNavigationItemSelectedListener {
         navView.setNavigationItemSelectedListener(this)
 
         val avatarImage = findViewById<ImageView>(R.id.avatarImage)
-        val savedName = ProfilePreferences.getProfilePic(this)
+        // If not found, use default avatar.
+        val savedName = ProfilePreferences.getProfilePic(this).ifBlank { ProfilePreferences.DEFAULT_PFP }
+        val profilePictureImage = ProfilePictureManager.getImage(this, savedName)!!
 
-        // Convert name to ID. If not found, use default_avatar
-        val resId = if (savedName.isNotBlank()) {
-            resources.getIdentifier(savedName, "drawable", packageName)
-        } else {
-            R.drawable.home_icon  // CHANGE "home_icon" TO "default_avatar"
-        }
-        avatarImage.setImageResource(if (resId != 0) resId else R.drawable.home_icon) // CHANGE "home_icon" TO "default_avatar"
+        avatarImage.setImageBitmap(profilePictureImage.toBitmap())
 
         showCurrentProfileData()
 
@@ -88,9 +75,9 @@ NavigationView.OnNavigationItemSelectedListener {
         val savedAge = ProfilePreferences.getAge(this)
         ageText.text = if (savedAge > 0) savedAge.toString() else "Set Age"
 
-        val savedImageName = ProfilePreferences.getProfilePic(this)
-        val resId = avatarMap[savedImageName] ?: R.drawable.home_icon // CHANGE TO "home_icon" to "default_avatar"
-        avatarImage.setImageResource(resId)
+        val savedImageName = ProfilePreferences.getProfilePic(this).ifBlank { ProfilePreferences.DEFAULT_PFP }
+        val savedImage = ProfilePictureManager.getImage(this, savedImageName)!!
+        avatarImage.setImageBitmap(savedImage.toBitmap())
     }
 
     private fun showUserAliasDialogue() {
@@ -102,13 +89,18 @@ NavigationView.OnNavigationItemSelectedListener {
 
         builder.setPositiveButton("OK") { dialog, which ->
             val inputAlias = input.text.toString()
-            if (inputAlias.isNotBlank() && inputAlias.length <= 20) {
+            if (inputAlias.length in ProfilePreferences.USERNAME_MIN_LENGTH..ProfilePreferences.USERNAME_MAX_LENGTH) {
                 val currentAlias = findViewById<TextView>(R.id.userAlias)
                 currentAlias.text = inputAlias
                 ProfilePreferences.setAlias(this, inputAlias)
                 Toast.makeText(this, "Alias updated", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Alias cannot be empty or above 20 characters", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Alias must be between ${ProfilePreferences.USERNAME_MIN_LENGTH} " +
+                            "and ${ProfilePreferences.USERNAME_MAX_LENGTH} characters",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
         builder.setNegativeButton("Cancel") { dialog, which ->
@@ -128,13 +120,17 @@ NavigationView.OnNavigationItemSelectedListener {
         builder.setPositiveButton("OK") { dialog, which ->
             val stringAge = input.text.toString()
             val inputAge = stringAge.toIntOrNull()
-            if (inputAge != null && inputAge in 1..100) {
+            if (inputAge != null && inputAge in ProfilePreferences.AGE_MIN..ProfilePreferences.AGE_MAX) {
                 val currentAge = findViewById<TextView>(R.id.userAge)
                 currentAge.text = stringAge
                 ProfilePreferences.setAge(this, inputAge)
                 Toast.makeText(this, "Age updated", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Age value must be between 1 and 100", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Age value must be between ${ProfilePreferences.AGE_MIN} and ${ProfilePreferences.AGE_MAX}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
         builder.setNegativeButton("Cancel") { dialog, which ->
@@ -145,25 +141,12 @@ NavigationView.OnNavigationItemSelectedListener {
     }
 
     private fun showUserAvatarDialogue() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Select an Avatar")
+        val profileImages = ProfilePictureManager.getAllImages(this)
 
-        // Get lists from our map
-        val names = avatarMap.keys.toList()
-        val ids = avatarMap.values.toList()
-
-        val gridView = layoutInflater.inflate(R.layout.dialog_avatar_picker, null) as GridView
-        gridView.adapter = AvatarAdapter(this, ids)
-        builder.setView(gridView)
-
-        val dialog = builder.create()
-
-        gridView.setOnItemClickListener { _, _, position, _ ->
-            ProfilePreferences.setProfilePic(this, names[position])
+        ProfilePicturePickerManager(this, profileImages) { image ->
+            ProfilePreferences.setProfilePic(this, image.name)
             showCurrentProfileData()
-            dialog.dismiss()
-        }
-        dialog.show()
+        }.show()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
