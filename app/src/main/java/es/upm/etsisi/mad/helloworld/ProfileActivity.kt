@@ -154,6 +154,7 @@ NavigationView.OnNavigationItemSelectedListener {
             R.id.nav_home -> {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
 
             R.id.nav_profile_activity -> {
@@ -163,6 +164,7 @@ NavigationView.OnNavigationItemSelectedListener {
             R.id.nav_open_street_map -> {
                 val intent = Intent(this, OpenStreetMapActivity::class.java)
                 startActivity(intent)
+                finish()
                 /* NEED TO FIX FOR WEEK 5
                 if (latestLocation != null) {
                     val intent = Intent(this, OpenStreetMapActivity::class.java)

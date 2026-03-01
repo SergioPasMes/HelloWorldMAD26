@@ -18,6 +18,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import es.upm.etsisi.mad.helloworld.ProfilePreferences.getAlias
 
 class MainActivity : AppCompatActivity(),
     LocationListener,
@@ -44,11 +45,16 @@ class MainActivity : AppCompatActivity(),
         val navView: NavigationView = findViewById(R.id.nav_view)
         navView.setNavigationItemSelectedListener(this)
 
+        val welcomeTextWidget = findViewById<TextView>(R.id.mainTextView)
+        val welcomeTextString = welcomeTextWidget.text.toString().format(getAlias(this))
+        welcomeTextWidget.text = welcomeTextString
+
         val buttonNext = findViewById<Button>(R.id.button_main_to_profile)
         buttonNext.setOnClickListener {
             Log.i(TAG, "Transitioning to ProfileActivity")
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val buttonOsm: Button = findViewById(R.id.osmButton)
@@ -59,6 +65,7 @@ class MainActivity : AppCompatActivity(),
                 bundle.putParcelable("location", latestLocation)
                 intent.putExtra("locationBundle", bundle)
                 startActivity(intent)
+                finish()
             } else {
                 Log.e(TAG, "Location is not yet set")
             }
@@ -103,6 +110,7 @@ class MainActivity : AppCompatActivity(),
             R.id.nav_profile_activity -> {
                 val intent = Intent(this, ProfileActivity::class.java)
                 startActivity(intent)
+                finish()
             }
 
             R.id.nav_open_street_map -> {
@@ -112,6 +120,7 @@ class MainActivity : AppCompatActivity(),
                     bundle.putParcelable("location", latestLocation)
                     intent.putExtra("locationBundle", bundle)
                     startActivity(intent)
+                    finish()
                 } else {
                     Log.e(TAG, "Location is not yet set")
                 }
