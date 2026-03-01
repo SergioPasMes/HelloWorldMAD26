@@ -25,7 +25,7 @@ class ThirdActivity : AppCompatActivity() {
         val buttonPrevious = findViewById<Button>(R.id.button_third_to_second)
         buttonPrevious.setOnClickListener {
             Log.i(TAG, "Transitioning to SecondActivity")
-            val intent = Intent(this, SecondActivity::class.java)
+            val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }
 

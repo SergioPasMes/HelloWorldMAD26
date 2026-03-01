@@ -1,0 +1,57 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+  <path
+      android:pathData="M-0,-0h32v32h-32z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.97095"
+      android:strokeLineCap="round">
+    <aapt:attr name="android:fillColor">
+      <gradient
+          android:startX="11.822"
+          android:startY="12.228"
+          android:endX="25.013"
+          android:endY="26.013"
+          android:type="linear">
+        <item android:offset="0" android:color="#FF85C148"/>
+        <item android:offset="1" android:color="#FF18901A"/>
+      </gradient>
+    </aapt:attr>
+  </path>
+  <path
+      android:pathData="M11.324,25.574L17.75,32L21.176,32L15.148,25.973L11.324,25.574z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.97095"
+      android:fillColor="#18001a"
+      android:fillAlpha="0.27894738"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="M15,14L7.588,18.412L21.176,32L32,32L32,30.684L15,14z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.97095"
+      android:fillColor="#18001a"
+      android:fillAlpha="0.27894738"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="M22,6L15,14L32,30.684L32,16L22,6z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.97095"
+      android:fillColor="#18001a"
+      android:fillAlpha="0.27894738"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="M17.119,10.626 L14.079,7.586 11.422,9.923 15,13.501Z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.06583"
+      android:fillColor="#18001a"
+      android:strokeColor="#00000000"
+      android:fillAlpha="0.278947"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="m12.55,26q-0.7,0 -1.225,-0.425 -0.525,-0.425 -0.7,-1.1l-1.125,-4.475l13,0l-1.125,4.475q-0.175,0.675 -0.7,1.1 -0.525,0.425 -1.225,0.425zM16,12q0,-2.5 1.75,-4.25 1.75,-1.75 4.25,-1.75 0,2.25 -1.425,3.9 -1.425,1.65 -3.575,2l0,2.1l8,0l0,3q0,0.825 -0.588,1.413Q23.825,19 23,19L9,19q-0.825,0 -1.413,-0.588Q7,17.825 7,17l0,-3l8,0l0,-2.1q-2.15,-0.35 -3.575,-2 -1.425,-1.65 -1.425,-3.9 2.5,0 4.25,1.75 1.75,1.75 1.75,4.25z"
+      android:fillColor="#ffffff"
+      android:strokeColor="#00000000"/>
+</vector>

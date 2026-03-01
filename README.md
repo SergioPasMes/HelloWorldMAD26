@@ -38,9 +38,17 @@ application development.
 - Created `OpenStretMapsActivity`, which shows in a map, with a marker, your current location.
 - Added markers in UPM buildings (see in OpenStreetMaps).
 
+### Week 4 ([release](https://github.com/bt0385/HelloWorldMAD26/releases/tag/w4.2026))
+- Created new activity (`LandingActivity`) for users launching the app for the first time.
+- Modified `MainActivity` with a text welcoming the user and the `SecondActivity` button now letting you go to `ProfileActivity`.
+- Modified `SecondActivity`, now called `ProfileActivity` so that the user can see and change his/her profile parameters.
+- Implemented a "Shared Preferences" persistence system to save the data inputed by the user in the `LandingActivity` and `ProfileActivity`.
+- Added a drawer menu in the `MainActivity` and `ProfileActivity` for better navigation.
+- IMPORTANT: Now the activities finish when the user leaves them. To go back, use the side menu or the buttons.
+
 
 ## Screenshots of the App
 
-| ![App view](readme/MainActivity.png "Main activity") | ![App view](readme/OpenStreetMapsActivity.png "OpenStreetMaps activity") | ![App view](readme/SecondActivity.png "Second activity") | ![App view](readme/ThirdActivity.png "Third activity") |
-|:----------------------------------------------------:|:------------------------------------------------------------------------:|:--------------------------------------------------------:|:-------------------------------------------------------:
-|                   *Main Activity*                    |                          *OpenStreetMaps Activity*                       |                    *Second Activity*                     |                  *Third Activity*                      |
+| ![App view](readme/LandingActivity.jpeg "Landing activity") | ![App view](readme/MainActivity.jpeg "Main activity") | ![App view](readme/OpenStreetMapsActivity.png "OpenStreetMaps activity") | ![App view](readme/ProfileActivity.jpeg "Profile activity") | ![App view](readme/ThirdActivity.png "Third activity") |
+|:----------------------------------------------------:|:----------------------------------------------------:|:------------------------------------------------------------------------:|:--------------------------------------------------------:|:-------------------------------------------------------:
+|                   *Landing Activity*                    |                   *Main Activity*                    |                          *OpenStreetMaps Activity*                       |                    *Second Activity*                     |                  *Third Activity*                      |

@@ -8,6 +8,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -15,34 +16,45 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+import es.upm.etsisi.mad.helloworld.ProfilePreferences.getAlias
 
-class MainActivity : AppCompatActivity(), LocationListener {
+class MainActivity : AppCompatActivity(),
+    LocationListener,
+    NavigationView.OnNavigationItemSelectedListener {
     private val TAG = this::class.toString()
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
     private var latestLocation: Location? = null
 
+    private lateinit var drawerLayout: DrawerLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        Log.d(TAG, "Starting activity $TAG")
-        Log.i(TAG, "Setting up $TAG")
-        Log.w(TAG, "A warning popped in $TAG")
-        Log.e(TAG, "An error occurred in $TAG")
-        Log.wtf(TAG, "Assertion error in $TAG")
+        drawerLayout = findViewById(R.id.drawer_layout)
 
-        val buttonNext = findViewById<Button>(R.id.button_main_to_second)
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        navView.setNavigationItemSelectedListener(this)
+
+        val welcomeTextWidget = findViewById<TextView>(R.id.mainTextView)
+        val welcomeTextString = welcomeTextWidget.text.toString().format(getAlias(this))
+        welcomeTextWidget.text = welcomeTextString
+
+        val buttonNext = findViewById<Button>(R.id.button_main_to_profile)
         buttonNext.setOnClickListener {
-            Log.i(TAG, "Transitioning to SecondActivity")
-            val intent = Intent(this, SecondActivity::class.java)
+            Log.i(TAG, "Transitioning to ProfileActivity")
+            val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val buttonOsm: Button = findViewById(R.id.osmButton)
@@ -53,6 +65,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 bundle.putParcelable("location", latestLocation)
                 intent.putExtra("locationBundle", bundle)
                 startActivity(intent)
+                finish()
             } else {
                 Log.e(TAG, "Location is not yet set")
             }
@@ -88,7 +101,37 @@ class MainActivity : AppCompatActivity(), LocationListener {
         this.latestLocation = location;
     }
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_home -> {
+                // Already in home
+            }
+
+            R.id.nav_profile_activity -> {
+                val intent = Intent(this, ProfileActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
+            R.id.nav_open_street_map -> {
+                if (latestLocation != null) {
+                    val intent = Intent(this, OpenStreetMapActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putParcelable("location", latestLocation)
+                    intent.putExtra("locationBundle", bundle)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Log.e(TAG, "Location is not yet set")
+                }
+            }
+        }
+        drawerLayout.closeDrawers()
+        return true
+    }
+
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
     override fun onProviderEnabled(provider: String) {}
     override fun onProviderDisabled(provider: String) {}
+
 }
