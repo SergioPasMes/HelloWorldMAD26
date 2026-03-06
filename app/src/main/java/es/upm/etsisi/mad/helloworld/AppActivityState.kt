@@ -54,3 +54,19 @@ class AppActivityState(
     }
 
 }
+
+/**
+ * Serializes this state into a bundle and adds it to an intent.
+ *
+ * Same as calling `AppActivityState.injectBundle(intent)`.
+ */
+fun Intent.injectAppState(state: AppActivityState) = state.injectBundle(this)
+
+/**
+ * Deserializes and restores a bundled instance of `AppActivityState`.
+ *
+ * If the state is not included in the bundle, a default state is returned.
+ *
+ * Same as calling `AppActivityState.unbundle(intent)`.
+ */
+fun Intent.unbundleAppState(): AppActivityState = AppActivityState.unbundle(this)
