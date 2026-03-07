@@ -1,6 +1,7 @@
 package es.upm.etsisi.mad.helloworld
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -19,6 +21,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import es.upm.etsisi.mad.helloworld.ProfilePreferences.getAlias
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity(),
     LocationListener,
@@ -27,6 +34,10 @@ class MainActivity : AppCompatActivity(),
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
     private var latestLocation: Location? = null
+
+    private var currentMission: Location? = null
+
+    private val missionAcceptance = 50f // Complete the mission if within 50 meters
 
     private lateinit var drawerLayout: DrawerLayout
 
@@ -59,15 +70,14 @@ class MainActivity : AppCompatActivity(),
 
         val buttonOsm: Button = findViewById(R.id.osmButton)
         buttonOsm.setOnClickListener {
-            if (latestLocation != null) {
+            if (latestLocation != null && currentMission != null) {
                 val intent = Intent(this, OpenStreetMapActivity::class.java)
                 val bundle = Bundle()
-                bundle.putParcelable("location", latestLocation)
+                // We send the user's location and the mission destination so they can be displayed on the map.
+                bundle.putParcelable("location", latestLocation)    // Blue dot (User)
+                bundle.putParcelable("destination", currentMission) // Star marker (Goal)
                 intent.putExtra("locationBundle", bundle)
                 startActivity(intent)
-                finish()
-            } else {
-                Log.e(TAG, "Location is not yet set")
             }
         }
 
@@ -79,7 +89,7 @@ class MainActivity : AppCompatActivity(),
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), locationPermissionCode)
         } else {
             //If the permissions are granted, the location will change every 5000 ms (or 5s) or when the user moves 5 meters
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
+            locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 5000, 5f, this)
         }
     }
 
@@ -88,17 +98,49 @@ class MainActivity : AppCompatActivity(),
         if (requestCode == locationPermissionCode) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
+                    locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 5000, 5f, this)
                 }
 
             }
         }
     }
 
+    @SuppressLint("DefaultLocale")
     override fun onLocationChanged(location: Location) {
-        val textView : TextView = findViewById(R.id.mainTextView)
-        textView.text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
-        this.latestLocation = location;
+        this.latestLocation = location
+        val mission: TextView = findViewById(R.id.missionObjective)
+
+        // Generate a mission if one doesn't exist (First time or just completed)
+        if (currentMission == null) {
+            currentMission = generateRandomDestination(location, 5000.0) // Mission Destination within 5km radius
+            val formattedLatitude = String.format("%.4f", currentMission?.latitude)
+            val formattedLongitude = String.format("%.4f", currentMission?.longitude)
+            mission.text = "Go to: Lat ${formattedLatitude}, Lon ${formattedLongitude}"
+            Log.i(TAG, "New Mission Set: ${formattedLatitude}, ${formattedLongitude}")
+        }
+
+        // Calculate distance to the mission
+        val distanceToGoal = location.distanceTo(currentMission!!) // We can use !! here because we just generated it if it was null
+
+        // Check for arrival
+        if (distanceToGoal <= missionAcceptance) {
+            currentMission = null // Reset so the next update generates a new one
+            Toast.makeText(this, "Mission Completed!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun generateRandomDestination(center: Location, maxRadiusMeters: Double): Location {
+        val radiusInDegrees = maxRadiusMeters / 111320.0 // 1 degree of latitude is roughly 111,320 meters
+
+        // Use sqrt(random) to ensure uniform distribution inside the circle
+        val radius = radiusInDegrees * sqrt(Random.nextDouble())
+        val theta = 2 * PI * Random.nextDouble()
+
+        val dest = Location(center)
+        dest.latitude = center.latitude + (radius * cos(theta))
+        dest.longitude = center.longitude + (radius * sin(theta) /
+                cos(center.latitude * PI / 180.0))
+        return dest
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -120,7 +162,6 @@ class MainActivity : AppCompatActivity(),
                     bundle.putParcelable("location", latestLocation)
                     intent.putExtra("locationBundle", bundle)
                     startActivity(intent)
-                    finish()
                 } else {
                     Log.e(TAG, "Location is not yet set")
                 }
