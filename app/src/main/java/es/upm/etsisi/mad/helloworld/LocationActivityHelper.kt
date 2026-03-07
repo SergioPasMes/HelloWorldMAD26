@@ -31,6 +31,7 @@ class LocationActivityHelper: DefaultLifecycleObserver {
         activity.lifecycle.addObserver(this)
 
         locationManager = UserLocationManager(activity)
+            .locationProvider(UserLocationManager.ProviderType.FUSED)
 
         PermissionManager()
             .permissions(UserLocationManager.REQUIRED_LOCATION_PERMISSIONS.asIterable())
