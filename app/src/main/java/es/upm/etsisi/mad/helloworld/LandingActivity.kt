@@ -15,7 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class LandingActivity : AppCompatActivity() {
-    private val TAG = this::class.toString()
+    private val TAG = this::class.simpleName
 
     private var currentPfp: ProfilePicture? = null
 

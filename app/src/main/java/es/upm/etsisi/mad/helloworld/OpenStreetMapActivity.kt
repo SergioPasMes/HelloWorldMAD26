@@ -19,7 +19,7 @@ import org.osmdroid.views.overlay.Polyline
 import android.widget.Toast
 
 class OpenStreetMapActivity : AppCompatActivity() {
-    private val TAG = this::class.toString()
+    private val TAG = this::class.simpleName
 
     private lateinit var appState: AppActivityState
 

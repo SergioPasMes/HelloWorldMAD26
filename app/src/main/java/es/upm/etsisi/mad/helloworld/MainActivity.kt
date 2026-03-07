@@ -19,7 +19,7 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
-    private val TAG = this::class.toString()
+    private val TAG = this::class.simpleName
 
     private val missionAcceptance = 50f // Complete the mission if within 50 meters
 
