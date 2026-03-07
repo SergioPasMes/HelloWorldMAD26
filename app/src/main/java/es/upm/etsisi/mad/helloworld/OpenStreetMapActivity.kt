@@ -68,6 +68,7 @@ class OpenStreetMapActivity : AppCompatActivity() {
         locationManager = LocationActivityHelper(this)
             .onLocationUpdated { appState.location = it; onLocationChanged(it) }
         navigationManager = NavigationActivityHelper(this, R.id.nav_view, appState)
+            .onBackPressed { navigationManager.transitionTo(MainActivity::class.java) }
 
         // Configure the user agent before loading the configuration
         Configuration.getInstance().userAgentValue = "es.upm.btb.mad26SG"

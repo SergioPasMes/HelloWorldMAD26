@@ -32,6 +32,7 @@ class ProfileActivity : AppCompatActivity() {
 
         appState = intent.unbundleAppState()
         navigationManager = NavigationActivityHelper(this, R.id.nav_view, appState)
+            .onBackPressed { navigationManager.transitionTo(MainActivity::class.java) }
         locationManager = LocationActivityHelper(this)
             .onLocationUpdated { appState.location = it }
 
