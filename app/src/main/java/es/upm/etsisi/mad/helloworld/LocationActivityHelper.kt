@@ -54,7 +54,7 @@ class LocationActivityHelper: DefaultLifecycleObserver {
         Log.w(TAG, "Location permissions denied")
         Toast.makeText(
             activity,
-            activity.getString(R.string.location_activity_helper_permission_warning),
+            R.string.location_activity_helper_permission_warning,
             Toast.LENGTH_LONG
         ).show()
     }

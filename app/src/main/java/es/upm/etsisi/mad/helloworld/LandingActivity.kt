@@ -101,7 +101,7 @@ class LandingActivity : AppCompatActivity() {
 
             Toast.makeText(
                 this,
-                getString(R.string.landing_activity_toast_profile_created),
+                R.string.landing_activity_toast_profile_created,
                 Toast.LENGTH_LONG
             ).show()
 
