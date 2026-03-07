@@ -5,6 +5,8 @@ import android.location.Location
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 
 
 /**
@@ -12,7 +14,7 @@ import androidx.activity.ComponentActivity
  *
  * Manages requesting location permissions and handling location updates.
  */
-class LocationActivityHelper {
+class LocationActivityHelper: DefaultLifecycleObserver {
     private val TAG = this::class.simpleName
 
     /**
@@ -21,14 +23,18 @@ class LocationActivityHelper {
     val lastLocation
         get() = locationManager.lastLocation
 
+    private val activity: ComponentActivity
     private val locationManager: UserLocationManager
 
     constructor(activity: ComponentActivity) {
+        this.activity = activity
+        activity.lifecycle.addObserver(this)
+
         locationManager = UserLocationManager(activity)
 
         PermissionManager()
             .permissions(UserLocationManager.REQUIRED_LOCATION_PERMISSIONS.asIterable())
-            .onPermissionDenied { showPermissionErrorMessage(activity) }
+            .onPermissionDenied { showPermissionErrorMessage() }
             .onPermissionGranted { locationManager.start(activity) }
             .request(activity)
     }
@@ -44,12 +50,19 @@ class LocationActivityHelper {
     /**
      * Notifies the user that location permissions are required.
      */
-    private fun showPermissionErrorMessage(context: Context) {
+    private fun showPermissionErrorMessage() {
         Log.w(TAG, "Location permissions denied")
         Toast.makeText(
-            context,
-            context.getString(R.string.location_activity_helper_permission_warning),
+            activity,
+            activity.getString(R.string.location_activity_helper_permission_warning),
             Toast.LENGTH_LONG
         ).show()
+    }
+
+    /**
+     * Automatically stop location updates when the activity calls `finish()`.
+     */
+    override fun onDestroy(owner: LifecycleOwner) {
+        locationManager.stop()
     }
 }
