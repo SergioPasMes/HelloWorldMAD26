@@ -22,7 +22,9 @@ class OpenStreetMapActivity : AppCompatActivity() {
     private val TAG = this::class.toString()
 
     private lateinit var appState: AppActivityState
+
     private lateinit var locationManager: LocationActivityHelper
+    private lateinit var navigationManager: NavigationActivityHelper
 
     private var userMarker: Marker? = null
     private lateinit var map: MapView
@@ -65,6 +67,7 @@ class OpenStreetMapActivity : AppCompatActivity() {
         appState = intent.unbundleAppState()
         locationManager = LocationActivityHelper(this)
             .onLocationUpdated { appState.location = it; onLocationChanged(it) }
+        navigationManager = NavigationActivityHelper(this, R.id.nav_view, appState)
 
         // Configure the user agent before loading the configuration
         Configuration.getInstance().userAgentValue = "es.upm.btb.mad26SG"
@@ -148,8 +151,10 @@ class OpenStreetMapActivity : AppCompatActivity() {
             val distance = location.distanceTo(mission)
             if (distance <= 50f) {
                 Toast.makeText(this, getString(R.string.mission_completion), Toast.LENGTH_LONG).show()
+                appState.currentMission = null
+                Toast.makeText(this, getString(R.string.mission_completion), Toast.LENGTH_LONG).show()
                 Log.i(TAG, "User reached destination. Mission cleared.")
-                finish() // When reached, we go back to MainActivity.
+                navigationManager.transitionTo(MainActivity::class.java) // When reached, we go back to MainActivity.
             }
         }
     }
