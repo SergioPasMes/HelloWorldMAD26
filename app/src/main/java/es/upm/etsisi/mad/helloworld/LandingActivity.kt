@@ -167,9 +167,6 @@ class LandingActivity : AppCompatActivity() {
         val error = when {
             age == null -> getString(R.string.landing_activity_age_error_missing)
 
-            age < 0 ->
-                getString(R.string.landing_activity_age_error_negative)
-
             age < ProfilePreferences.AGE_MIN ->
                 getString(R.string.landing_activity_age_error_too_low)
                     .format(ProfilePreferences.AGE_MIN)
