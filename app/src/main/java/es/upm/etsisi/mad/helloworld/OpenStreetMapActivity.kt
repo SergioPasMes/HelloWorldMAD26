@@ -85,6 +85,7 @@ class OpenStreetMapActivity : AppCompatActivity() {
 
         map = findViewById(R.id.map)
         map.setTileSource(TileSourceFactory.MAPNIK)
+        map.setMultiTouchControls(true)
         map.controller.setZoom(15.0)
         map.controller.setCenter(startPoint)
 
