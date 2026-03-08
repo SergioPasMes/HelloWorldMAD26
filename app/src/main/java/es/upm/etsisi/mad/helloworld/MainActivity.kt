@@ -58,17 +58,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("DefaultLocale")
     fun onLocationChanged(location: Location) {
-        val mission: TextView = findViewById(R.id.missionObjective)
-
         // Generate a mission if one doesn't exist (First time or just completed)
         if (appState.currentMission == null) {
-            appState.currentMission = generateRandomDestination(location, 5000.0) // Mission Destination within 5km radius
-            val formattedLatitude = String.format("%.4f", appState.currentMission?.latitude)
-            val formattedLongitude = String.format("%.4f", appState.currentMission?.longitude)
-            mission.text = getString(R.string.mission_destination, formattedLatitude, formattedLongitude)
-            Log.i(TAG, "New Mission Set: ${formattedLatitude}, ${formattedLongitude}")
+            val currentMission = generateRandomDestination(location, 5000.0) // Mission Destination within 5km radius
+            appState.currentMission = currentMission
+            showMission(currentMission)
         }
 
         // Calculate distance to the mission
@@ -79,6 +74,18 @@ class MainActivity : AppCompatActivity() {
             appState.currentMission = null // Reset so the next update generates a new one
             Toast.makeText(this, R.string.mission_completion, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    /**
+     * Updates the activity to show the current mission's location.
+     */
+    @SuppressLint("DefaultLocale")
+    private fun showMission(missionLocation: Location) {
+        val mission: TextView = findViewById(R.id.missionObjective)
+        val formattedLatitude = String.format("%.4f", missionLocation.latitude)
+        val formattedLongitude = String.format("%.4f", missionLocation.longitude)
+        mission.text = getString(R.string.mission_destination, formattedLatitude, formattedLongitude)
+        Log.i(TAG, "New Mission Set: ${formattedLatitude}, ${formattedLongitude}")
     }
 
     private fun generateRandomDestination(center: Location, maxRadiusMeters: Double): Location {
