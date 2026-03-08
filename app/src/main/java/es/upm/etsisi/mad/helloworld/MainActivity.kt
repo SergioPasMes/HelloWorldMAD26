@@ -56,6 +56,8 @@ class MainActivity : AppCompatActivity() {
         buttonOsm.setOnClickListener {
             navigationManager.transitionTo(OpenStreetMapActivity::class.java)
         }
+
+        appState.currentMission?.let { showMission(it) }
     }
 
     fun onLocationChanged(location: Location) {
