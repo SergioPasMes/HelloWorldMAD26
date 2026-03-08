@@ -18,6 +18,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import androidx.core.content.ContextCompat
 import org.osmdroid.views.overlay.Polyline
+import android.widget.Toast
 
 class OpenStreetMapActivity : AppCompatActivity(), LocationListener {
     private val TAG = this::class.toString()
@@ -71,7 +72,7 @@ class OpenStreetMapActivity : AppCompatActivity(), LocationListener {
         val bundle = intent.getBundleExtra("locationBundle")
         val location: Location? = bundle?.getParcelable("location")
 
-        val missionDestination: Location? = bundle?.getParcelable("destination")
+        currentMission = bundle?.getParcelable("destination")
 
         val startPoint = if(location != null) {
             Log.d(TAG, "onCreate: Location[${location.altitude}][${location.latitude}][${location.longitude}]")
@@ -81,7 +82,7 @@ class OpenStreetMapActivity : AppCompatActivity(), LocationListener {
             GeoPoint(40.389683644051864, -3.627825356970311)
         }
 
-        locationManager = getSystemService(LOCATION_SERVICE) as android.location.LocationManager
+        locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
 
         if (androidx.core.app.ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 5000, 5f, this)
@@ -92,27 +93,21 @@ class OpenStreetMapActivity : AppCompatActivity(), LocationListener {
         map.controller.setZoom(15.0)
         map.controller.setCenter(startPoint)
 
-        val marker = Marker(map)
-        marker.position = startPoint
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-        marker.icon = ContextCompat.getDrawable(this, android.R.drawable.ic_menu_compass) as BitmapDrawable
-        marker.title = "My current location"
-        map.overlays.add(marker)
 
         //Add list of markers
         addGymkhanaMarkers(map, gymkhanaCoords, gymkhanaNames, this)
         addRouteMarkers(map, gymkhanaCoords, gymkhanaNames, this)
         map.controller.setZoom(18.0)
 
-        if (missionDestination != null) {
-            val missionPoint = GeoPoint(missionDestination.latitude, missionDestination.longitude)
+        if (currentMission != null) {
+            val missionPoint = GeoPoint(currentMission!!.latitude, currentMission!!.longitude)
             val missionMarker = Marker(map)
             missionMarker.position = missionPoint
             missionMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
 
             // We will use a star icon to mark the destination
             missionMarker.icon = ContextCompat.getDrawable(this, android.R.drawable.btn_star_big_on) as BitmapDrawable
-            missionMarker.title = "CURRENT MISSION"
+            missionMarker.title = getString(R.string.mission_marker)
             map.overlays.add(missionMarker)
         }
     }
@@ -161,7 +156,7 @@ class OpenStreetMapActivity : AppCompatActivity(), LocationListener {
         currentMission?.let { mission ->
             val distance = location.distanceTo(mission)
             if (distance <= 50f) {
-                android.widget.Toast.makeText(this, "¡Mission Completed!", android.widget.Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.mission_completion), Toast.LENGTH_LONG).show()
                 Log.i(TAG, "User reached destination. Mission cleared.")
                 finish() // When reached, we go back to MainActivity.
             }

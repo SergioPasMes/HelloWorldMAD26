@@ -65,7 +65,6 @@ class MainActivity : AppCompatActivity(),
             Log.i(TAG, "Transitioning to ProfileActivity")
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
         val buttonOsm: Button = findViewById(R.id.osmButton)
@@ -115,8 +114,8 @@ class MainActivity : AppCompatActivity(),
             currentMission = generateRandomDestination(location, 5000.0) // Mission Destination within 5km radius
             val formattedLatitude = String.format("%.4f", currentMission?.latitude)
             val formattedLongitude = String.format("%.4f", currentMission?.longitude)
-            mission.text = "Go to: Lat ${formattedLatitude}, Lon ${formattedLongitude}"
-            Log.i(TAG, "New Mission Set: ${formattedLatitude}, ${formattedLongitude}")
+            mission.text = getString(R.string.mission_destination, formattedLatitude, formattedLongitude)
+            Log.i(TAG, "New Mission Set: ${formattedLatitude}, $formattedLongitude")
         }
 
         // Calculate distance to the mission
@@ -125,7 +124,7 @@ class MainActivity : AppCompatActivity(),
         // Check for arrival
         if (distanceToGoal <= missionAcceptance) {
             currentMission = null // Reset so the next update generates a new one
-            Toast.makeText(this, "Mission Completed!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.mission_completion), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -152,7 +151,6 @@ class MainActivity : AppCompatActivity(),
             R.id.nav_profile_activity -> {
                 val intent = Intent(this, ProfileActivity::class.java)
                 startActivity(intent)
-                finish()
             }
 
             R.id.nav_open_street_map -> {
