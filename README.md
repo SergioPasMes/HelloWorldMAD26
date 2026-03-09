@@ -75,6 +75,6 @@ Related pull requests:
 
 ## Screenshots of the App
 
-| ![App view](readme/LandingActivity.jpeg "Landing activity") | ![App view](readme/MainActivity.jpeg "Main activity") | ![App view](readme/OpenStreetMapsActivity.png "OpenStreetMaps activity") | ![App view](readme/ProfileActivity.jpeg "Profile activity") | ![App view](readme/ThirdActivity.png "Third activity") |
-|:----------------------------------------------------:|:----------------------------------------------------:|:------------------------------------------------------------------------:|:--------------------------------------------------------:|:-------------------------------------------------------:
-|                   *Landing Activity*                    |                   *Main Activity*                    |                          *OpenStreetMaps Activity*                       |                    *Second Activity*                     |                  *Third Activity*                      |
+| ![App view](readme/LandingActivity.jpeg "Landing activity") | ![App view](readme/MainActivity.png "Main activity") | ![App view](readme/OpenStreetMapActivity.png "OpenStreetMaps activity") | ![App view](readme/ProfileActivity.jpeg "Profile activity") | ![App view](readme/ThirdActivity.png "Third activity") |
+|:-----------------------------------------------------------:|:----------------------------------------------------:|:-----------------------------------------------------------------------:|:-----------------------------------------------------------:|:------------------------------------------------------:|
+|                     *Landing Activity*                      |                   *Main Activity*                    |                        *OpenStreetMaps Activity*                        |                      *Second Activity*                      |                    *Third Activity*                    |
