@@ -15,7 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class LandingActivity : AppCompatActivity() {
-    private val TAG = this::class.toString()
+    private val TAG = this::class.simpleName
 
     private var currentPfp: ProfilePicture? = null
 
@@ -101,7 +101,7 @@ class LandingActivity : AppCompatActivity() {
 
             Toast.makeText(
                 this,
-                getString(R.string.landing_activity_toast_profile_created),
+                R.string.landing_activity_toast_profile_created,
                 Toast.LENGTH_LONG
             ).show()
 
