@@ -2,7 +2,7 @@
 
 ## Members
 - Sergio Pastor Mesas (bt0385) ([GitHub](https://github.com/bt0385))
-- Gabriel Gutiérrez Fuentes (bt0055) ([GitHub](https://github.com/gabrielgutierrezfuentes))
+- Gabriel Gutiérrez Fuentes (bt0055) ([GitHub](https://github.com/gabgutf))
 
 ## Links
 GitHub:
@@ -46,9 +46,35 @@ application development.
 - Added a drawer menu in the `MainActivity` and `ProfileActivity` for better navigation.
 - IMPORTANT: Now the activities finish when the user leaves them. To go back, use the side menu or the buttons.
 
+### Week 5 ([release](https://github.com/bt0385/HelloWorldMAD26/releases/tag/w5.2026))
+Implemented the following changes:
+- Implemented mission system.
+    - Generates missions around the user.
+    - Checks the location of the user.
+    - Clears the mission and notifies the user if they are close enough.
+- Refactoring and code cleanup.
+  - Added `AppActivityState`, which stores common state shared by most activities.
+  - Implemented `PermissionManager` to simplify permission requests.
+  - Added `NavigationActivityHelper` to manage the navigation drawer.
+  - Implemented `UserLocationManager` and `LocationActivityHelper` to simplify location management.
+
+Fixed the following issues:
+- [#11](https://github.com/bt0385/HelloWorldMAD26/issues/11) `OpenStreetMapActivity` does not show current location unless launched from `MainActivity`.
+- [#12](https://github.com/bt0385/HelloWorldMAD26/issues/12) Cannot navigate out of `OpenStreetMapActivity` without closing app.
+- [#13](https://github.com/bt0385/HelloWorldMAD26/issues/13) Create utility class for navigation drawer.
+- [#14](https://github.com/bt0385/HelloWorldMAD26/issues/14) Remove negative age check from `LandingActivity`.
+- [#15](https://github.com/bt0385/HelloWorldMAD26/issues/15) Mission system.
+- [#16](https://github.com/bt0385/HelloWorldMAD26/issues/16) Show current mission on map.
+- [#17](https://github.com/bt0385/HelloWorldMAD26/issues/17) Show mission location on `MainActivity`.
+- [#18](https://github.com/bt0385/HelloWorldMAD26/issues/18) Create state class.
+
+Related pull requests:
+- [#19](https://github.com/bt0385/HelloWorldMAD26/pull/19) Week 5 Mission Generator
+- [#20](https://github.com/bt0385/HelloWorldMAD26/pull/20) Refactor location, navigation and permission systems into helper classes
+- [#21](https://github.com/bt0385/HelloWorldMAD26/pull/21) Merge week 5 changes to master
 
 ## Screenshots of the App
 
-| ![App view](readme/LandingActivity.jpeg "Landing activity") | ![App view](readme/MainActivity.jpeg "Main activity") | ![App view](readme/OpenStreetMapsActivity.png "OpenStreetMaps activity") | ![App view](readme/ProfileActivity.jpeg "Profile activity") | ![App view](readme/ThirdActivity.png "Third activity") |
-|:----------------------------------------------------:|:----------------------------------------------------:|:------------------------------------------------------------------------:|:--------------------------------------------------------:|:-------------------------------------------------------:
-|                   *Landing Activity*                    |                   *Main Activity*                    |                          *OpenStreetMaps Activity*                       |                    *Second Activity*                     |                  *Third Activity*                      |
+| ![App view](readme/LandingActivity.jpeg "Landing activity") | ![App view](readme/MainActivity.png "Main activity") | ![App view](readme/OpenStreetMapActivity.png "OpenStreetMaps activity") | ![App view](readme/ProfileActivity.jpeg "Profile activity") | ![App view](readme/ThirdActivity.png "Third activity") |
+|:-----------------------------------------------------------:|:----------------------------------------------------:|:-----------------------------------------------------------------------:|:-----------------------------------------------------------:|:------------------------------------------------------:|
+|                     *Landing Activity*                      |                   *Main Activity*                    |                        *OpenStreetMaps Activity*                        |                      *Second Activity*                      |                    *Third Activity*                    |

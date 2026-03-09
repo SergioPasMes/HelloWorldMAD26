@@ -1,34 +1,32 @@
 package es.upm.etsisi.mad.helloworld
 
-import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
+import android.annotation.SuppressLint
 import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
 import es.upm.etsisi.mad.helloworld.ProfilePreferences.getAlias
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
+import kotlin.random.Random
 
-class MainActivity : AppCompatActivity(),
-    LocationListener,
-    NavigationView.OnNavigationItemSelectedListener {
-    private val TAG = this::class.toString()
-    private lateinit var locationManager: LocationManager
-    private val locationPermissionCode = 2
-    private var latestLocation: Location? = null
+class MainActivity : AppCompatActivity() {
+    private val TAG = this::class.simpleName
 
-    private lateinit var drawerLayout: DrawerLayout
+    private val missionAcceptance = 50f // Complete the mission if within 50 meters
+
+    private lateinit var appState: AppActivityState
+
+    private lateinit var navigationManager: NavigationActivityHelper
+    private lateinit var locationManager: LocationActivityHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,10 +38,10 @@ class MainActivity : AppCompatActivity(),
             insets
         }
 
-        drawerLayout = findViewById(R.id.drawer_layout)
-
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        navView.setNavigationItemSelectedListener(this)
+        appState = intent.unbundleAppState()
+        navigationManager = NavigationActivityHelper(this, R.id.nav_view, appState)
+        locationManager = LocationActivityHelper(this)
+            .onLocationUpdated { appState.location = it; onLocationChanged(it) }
 
         val welcomeTextWidget = findViewById<TextView>(R.id.mainTextView)
         val welcomeTextString = welcomeTextWidget.text.toString().format(getAlias(this))
@@ -51,87 +49,58 @@ class MainActivity : AppCompatActivity(),
 
         val buttonNext = findViewById<Button>(R.id.button_main_to_profile)
         buttonNext.setOnClickListener {
-            Log.i(TAG, "Transitioning to ProfileActivity")
-            val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
-            finish()
+            navigationManager.transitionTo(ProfileActivity::class.java)
         }
 
         val buttonOsm: Button = findViewById(R.id.osmButton)
         buttonOsm.setOnClickListener {
-            if (latestLocation != null) {
-                val intent = Intent(this, OpenStreetMapActivity::class.java)
-                val bundle = Bundle()
-                bundle.putParcelable("location", latestLocation)
-                intent.putExtra("locationBundle", bundle)
-                startActivity(intent)
-                finish()
-            } else {
-                Log.e(TAG, "Location is not yet set")
-            }
+            navigationManager.transitionTo(OpenStreetMapActivity::class.java)
         }
 
-        locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-
-        //Check for location permissions
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), locationPermissionCode)
-        } else {
-            //If the permissions are granted, the location will change every 5000 ms (or 5s) or when the user moves 5 meters
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
-        }
+        appState.currentMission?.let { showMission(it) }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == locationPermissionCode) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
-                }
+    fun onLocationChanged(location: Location) {
+        // Generate a mission if one doesn't exist (First time or just completed)
+        if (appState.currentMission == null) {
+            val currentMission = generateRandomDestination(location, 5000.0) // Mission Destination within 5km radius
+            appState.currentMission = currentMission
+            showMission(currentMission)
+        }
 
-            }
+        // Calculate distance to the mission
+        val distanceToGoal = location.distanceTo(appState.currentMission!!) // We can use !! here because we just generated it if it was null
+
+        // Check for arrival
+        if (distanceToGoal <= missionAcceptance) {
+            appState.currentMission = null // Reset so the next update generates a new one
+            Toast.makeText(this, R.string.mission_completion, Toast.LENGTH_SHORT).show()
         }
     }
 
-    override fun onLocationChanged(location: Location) {
-        val textView : TextView = findViewById(R.id.mainTextView)
-        textView.text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
-        this.latestLocation = location;
+    /**
+     * Updates the activity to show the current mission's location.
+     */
+    @SuppressLint("DefaultLocale")
+    private fun showMission(missionLocation: Location) {
+        val mission: TextView = findViewById(R.id.missionObjective)
+        val formattedLatitude = String.format("%.4f", missionLocation.latitude)
+        val formattedLongitude = String.format("%.4f", missionLocation.longitude)
+        mission.text = getString(R.string.mission_destination, formattedLatitude, formattedLongitude)
+        Log.i(TAG, "New Mission Set: ${formattedLatitude}, ${formattedLongitude}")
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_home -> {
-                // Already in home
-            }
+    private fun generateRandomDestination(center: Location, maxRadiusMeters: Double): Location {
+        val radiusInDegrees = maxRadiusMeters / 111320.0 // 1 degree of latitude is roughly 111,320 meters
 
-            R.id.nav_profile_activity -> {
-                val intent = Intent(this, ProfileActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
+        // Use sqrt(random) to ensure uniform distribution inside the circle
+        val radius = radiusInDegrees * sqrt(Random.nextDouble())
+        val theta = 2 * PI * Random.nextDouble()
 
-            R.id.nav_open_street_map -> {
-                if (latestLocation != null) {
-                    val intent = Intent(this, OpenStreetMapActivity::class.java)
-                    val bundle = Bundle()
-                    bundle.putParcelable("location", latestLocation)
-                    intent.putExtra("locationBundle", bundle)
-                    startActivity(intent)
-                    finish()
-                } else {
-                    Log.e(TAG, "Location is not yet set")
-                }
-            }
-        }
-        drawerLayout.closeDrawers()
-        return true
+        val dest = Location(center)
+        dest.latitude = center.latitude + (radius * cos(theta))
+        dest.longitude = center.longitude + (radius * sin(theta) /
+                cos(center.latitude * PI / 180.0))
+        return dest
     }
-
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-    override fun onProviderEnabled(provider: String) {}
-    override fun onProviderDisabled(provider: String) {}
-
 }

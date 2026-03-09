@@ -8,7 +8,6 @@
     <string name="landing_activity_username_error_too_short">Username must be at least %1d characters long</string>
     <string name="landing_activity_username_error_missing">Username is required</string>
     <string name="landing_activity_age_hint">Age (years)</string>
-    <string name="landing_activity_age_error_negative">Age may not be a negative number</string>
     <string name="landing_activity_age_error_too_low">You must be at least %1d years old</string>
     <string name="landing_activity_age_error_too_high">Age may not exceed %1d years</string>
     <string name="landing_activity_age_error_missing">Age is required</string>
@@ -20,4 +19,17 @@
     <string name="alert_pfp_picker_body_text">Choose an image that suits your style</string>
 
     <string name="main_activity_welcome">Welcome Back %1s!</string>
+
+    <string name="location_activity_helper_permission_warning">Location permissions are required for this app to work</string>
+    <string name="osm_button_text">View in OpenStreetMap</string>
+
+    <string name="mission_marker">CURRENT MISSION</string>
+    <string name="mission_label">Current Mission</string>
+    <string name="mission_loading">Loading Mission …</string>
+    <string name="mission_destination">Go to: Lat %1$s, Lon %2$s</string>
+    <string name="mission_completion">Mission completed!</string>
+
+    <string name="drawer_menu_home_shortcut">Home</string>
+    <string name="drawer_menu_profile_shortcut">Profile</string>
+    <string name="drawer_menu_map_shortcut">OpenStreetMaps</string>
 </resources>

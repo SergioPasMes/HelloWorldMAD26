@@ -1,10 +1,7 @@
 package es.upm.etsisi.mad.helloworld
 
 import android.app.AlertDialog
-import android.content.Intent
-import android.location.Location
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -12,19 +9,16 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
 
-class ProfileActivity : AppCompatActivity(),
-NavigationView.OnNavigationItemSelectedListener {
+class ProfileActivity : AppCompatActivity() {
+    val TAG = this::class.simpleName
 
-    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var appState: AppActivityState
 
-    private var latestLocation: Location? = null
-
+    private lateinit var navigationManager: NavigationActivityHelper
+    private lateinit var locationManager: LocationActivityHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,10 +30,11 @@ NavigationView.OnNavigationItemSelectedListener {
             insets
         }
 
-        drawerLayout = findViewById(R.id.drawer_layout)
-
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        navView.setNavigationItemSelectedListener(this)
+        appState = intent.unbundleAppState()
+        navigationManager = NavigationActivityHelper(this, R.id.nav_view, appState)
+            .onBackPressed { navigationManager.transitionTo(MainActivity::class.java) }
+        locationManager = LocationActivityHelper(this)
+            .onLocationUpdated { appState.location = it }
 
         val avatarImage = findViewById<ImageView>(R.id.avatarImage)
         // If not found, use default avatar.
@@ -147,39 +142,5 @@ NavigationView.OnNavigationItemSelectedListener {
             ProfilePreferences.setProfilePic(this, image.name)
             showCurrentProfileData()
         }.show()
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_home -> {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-
-            R.id.nav_profile_activity -> {
-                // Already in profile
-            }
-
-            R.id.nav_open_street_map -> {
-                val intent = Intent(this, OpenStreetMapActivity::class.java)
-                startActivity(intent)
-                finish()
-                /* NEED TO FIX FOR WEEK 5
-                if (latestLocation != null) {
-                    val intent = Intent(this, OpenStreetMapActivity::class.java)
-                    val bundle = Bundle()
-                    bundle.putParcelable("location", latestLocation)
-                    intent.putExtra("locationBundle", bundle)
-                    startActivity(intent)
-                } else {
-                    Log.e(TAG, "Location is not yet set")
-                }
-                */
-            }
-        }
-
-        drawerLayout.closeDrawer(GravityCompat.START)
-        return true
     }
 }

@@ -15,7 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class LandingActivity : AppCompatActivity() {
-    private val TAG = this::class.toString()
+    private val TAG = this::class.simpleName
 
     private var currentPfp: ProfilePicture? = null
 
@@ -101,7 +101,7 @@ class LandingActivity : AppCompatActivity() {
 
             Toast.makeText(
                 this,
-                getString(R.string.landing_activity_toast_profile_created),
+                R.string.landing_activity_toast_profile_created,
                 Toast.LENGTH_LONG
             ).show()
 
@@ -166,9 +166,6 @@ class LandingActivity : AppCompatActivity() {
     private fun checkAgeAndShowError(age: Int?): Boolean {
         val error = when {
             age == null -> getString(R.string.landing_activity_age_error_missing)
-
-            age < 0 ->
-                getString(R.string.landing_activity_age_error_negative)
 
             age < ProfilePreferences.AGE_MIN ->
                 getString(R.string.landing_activity_age_error_too_low)
