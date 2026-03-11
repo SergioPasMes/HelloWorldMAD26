@@ -29,6 +29,8 @@ class OpenStreetMapActivity : AppCompatActivity() {
     private var userMarker: Marker? = null
     private lateinit var map: MapView
 
+    private lateinit var missionManager: MissionManager
+
     val gymkhanaCoords = listOf(
         GeoPoint(40.38779608214728, -3.627687914352839), // Tennis
         GeoPoint(40.38788595319803, -3.627048250272035), // Futsal outdoors
@@ -65,8 +67,16 @@ class OpenStreetMapActivity : AppCompatActivity() {
         }
 
         appState = intent.unbundleAppState()
+        missionManager = MissionManager()
+            .onMissionCompleted {
+                Toast.makeText(this, getString(R.string.mission_completion), Toast.LENGTH_LONG).show()
+                appState.currentMission = null
+                Log.i(TAG, "User reached destination. Mission cleared.")
+                navigationManager.transitionTo(MainActivity::class.java) // When reached, we go back to MainActivity.
+            }
+
         locationManager = LocationActivityHelper(this)
-            .onLocationUpdated { appState.location = it; onLocationChanged(it) }
+            .onLocationUpdated { appState.location = it; onUserMovement(it, appState) }
         navigationManager = NavigationActivityHelper(this, R.id.nav_view, appState)
             .onBackPressed { navigationManager.transitionTo(MainActivity::class.java) }
 
@@ -135,7 +145,7 @@ class OpenStreetMapActivity : AppCompatActivity() {
         map.overlays.add(polyline)
     }
 
-    fun onLocationChanged(location: Location) {
+    fun onUserMovement(location: Location, appState: AppActivityState) {
         // We will use our plant icon to indicate the user movement position
         val userPoint = GeoPoint(location.latitude, location.longitude)
         if (userMarker == null) {
@@ -149,15 +159,6 @@ class OpenStreetMapActivity : AppCompatActivity() {
         map.invalidate()
 
         // Destination Check
-        appState.currentMission?.let { mission ->
-            val distance = location.distanceTo(mission)
-            if (distance <= 50f) {
-                Toast.makeText(this, getString(R.string.mission_completion), Toast.LENGTH_LONG).show()
-                appState.currentMission = null
-                Toast.makeText(this, getString(R.string.mission_completion), Toast.LENGTH_LONG).show()
-                Log.i(TAG, "User reached destination. Mission cleared.")
-                navigationManager.transitionTo(MainActivity::class.java) // When reached, we go back to MainActivity.
-            }
-        }
+        missionManager.onLocationChanged(location, appState)
     }
 }

@@ -12,11 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import es.upm.etsisi.mad.helloworld.ProfilePreferences.getAlias
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     private val TAG = this::class.simpleName
