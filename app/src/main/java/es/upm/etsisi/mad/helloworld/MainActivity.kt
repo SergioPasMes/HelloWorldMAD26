@@ -11,7 +11,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.room.Room
 import es.upm.etsisi.mad.helloworld.ProfilePreferences.getAlias
+import es.upm.etsisi.mad.helloworld.persistence.AppDatabase
+import es.upm.etsisi.mad.helloworld.persistence.User
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -58,6 +61,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         appState.currentMission?.let { showMission(it) }
+
+        val db = Room.databaseBuilder(
+            this,
+            AppDatabase::class.java, "app-database"
+        ).build()
+
+        db.userDao().add(User(0u, "Sergio",23u,"pfp1.png"))
     }
 
     fun onLocationChanged(location: Location) {
