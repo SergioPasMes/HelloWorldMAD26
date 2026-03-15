@@ -1,7 +1,6 @@
 package es.upm.etsisi.mad.helloworld
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -88,6 +87,7 @@ class LandingActivity : AppCompatActivity() {
         val ageOkay = checkAgeAndShowError(age)
 
         if(usernameOkay && ageOkay) {
+
             Log.i(TAG, "Saving preferences:")
             Log.i(TAG, "    Username:   $username")
             Log.i(TAG, "    Age:        $age")
@@ -97,15 +97,17 @@ class LandingActivity : AppCompatActivity() {
             ProfilePreferences.setAge(this, age!!)
             currentPfp?.let {
                 ProfilePreferences.setProfilePic(this, it.name)
+                val user = User( username, age, it.name)
+                APIManager().postUserData(this, user) {
+                    Toast.makeText(
+                        this,
+                        R.string.landing_activity_toast_profile_created,
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    switchToMainActivity()
+                }
             }
-
-            Toast.makeText(
-                this,
-                R.string.landing_activity_toast_profile_created,
-                Toast.LENGTH_LONG
-            ).show()
-
-            switchToMainActivity()
         }
     }
 

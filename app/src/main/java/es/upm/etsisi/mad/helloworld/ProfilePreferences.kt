@@ -17,6 +17,8 @@ object ProfilePreferences {
     private const val keyAge = "age"
     private const val keyPicturePath = "profile_picture"
 
+    private const val keyToken = "user_token"
+
 
     private fun getPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
@@ -34,6 +36,10 @@ object ProfilePreferences {
         return getPreferences(context).getString(keyPicturePath, "") ?: ""
     }
 
+    fun getToken(context: Context): String {
+        return getPreferences(context).getString(keyToken, "") ?: ""
+    }
+
     fun setAlias(context: Context, alias: String) {
         getPreferences(context).edit().putString(keyAlias, alias).apply()
     }
@@ -44,5 +50,9 @@ object ProfilePreferences {
 
     fun setProfilePic(context: Context, path: String) {
         getPreferences(context).edit().putString(keyPicturePath, path).apply()
+    }
+
+    fun setToken(context: Context, token: String) {
+        getPreferences(context).edit().putString(keyToken, token).apply()
     }
 }
