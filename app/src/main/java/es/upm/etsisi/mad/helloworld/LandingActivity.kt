@@ -98,7 +98,7 @@ class LandingActivity : AppCompatActivity() {
             currentPfp?.let {
                 ProfilePreferences.setProfilePic(this, it.name)
                 val user = User( username, age, it.name)
-                APIManager().postUserData(this, user) {
+                APIManager().postUserData(this, user, onSuccess = {
                     Toast.makeText(
                         this,
                         R.string.landing_activity_toast_profile_created,
@@ -106,7 +106,13 @@ class LandingActivity : AppCompatActivity() {
                     ).show()
 
                     switchToMainActivity()
-                }
+                }, onError = { errorMessage ->
+                    Toast.makeText(
+                        this,
+                        errorMessage,
+                        Toast.LENGTH_LONG)
+                        .show()
+                })
             }
         }
     }
