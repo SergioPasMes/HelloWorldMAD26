@@ -32,4 +32,11 @@
     <string name="drawer_menu_home_shortcut">Home</string>
     <string name="drawer_menu_profile_shortcut">Profile</string>
     <string name="drawer_menu_map_shortcut">OpenStreetMaps</string>
+    <string name="drawer_menu_ranking_shortcut">Ranking</string>
+
+    <string name="ranking_title">Ranking</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="alias">Alias</string>
+    <string name="score">%1d</string>
+    <string name="API_error">%1d: %2s</string>
 </resources>

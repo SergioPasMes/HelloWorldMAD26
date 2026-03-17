@@ -12,7 +12,6 @@ object RetrofitInstance {
 
     fun getRetrofitInstance(): Retrofit {
         val gson = GsonBuilder()
-            .excludeFieldsWithoutExposeAnnotation() // This is the switch that turns on @Expose
             .create()
 
         if (retrofit == null) {

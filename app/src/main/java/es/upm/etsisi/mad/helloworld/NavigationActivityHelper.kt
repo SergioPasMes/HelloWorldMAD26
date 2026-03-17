@@ -54,6 +54,7 @@ class NavigationActivityHelper: DefaultLifecycleObserver {
             R.id.nav_home -> MainActivity::class.java
             R.id.nav_profile_activity -> ProfileActivity::class.java
             R.id.nav_open_street_map -> OpenStreetMapActivity::class.java
+            R.id.nav_ranking -> RankingActivity::class.java
             else -> return false
         }
 

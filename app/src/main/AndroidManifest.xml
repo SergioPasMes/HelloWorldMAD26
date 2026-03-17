@@ -30,7 +30,7 @@
             android:name=".OpenStreetMapActivity"
             android:exported="false" />
         <activity
-            android:name=".ThirdActivity"
+            android:name=".RankingActivity"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"
