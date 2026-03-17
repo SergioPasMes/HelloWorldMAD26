@@ -28,7 +28,7 @@ class RankingAdapter(private val userList: List<User>) : RecyclerView.Adapter<Ra
         val context = holder.itemView.context
         holder.score.text = context.getString(R.string.score, user.score)
 
-        val imageName = user.profile_picture
+        val imageName = user.profile_picture!!
         val bitmap = ProfilePictureManager.getImage(context, imageName)
         if (bitmap != null) {
             holder.image.setImageBitmap(bitmap.toBitmap())

@@ -17,6 +17,8 @@ object ProfilePreferences {
     private const val keyAge = "age"
     private const val keyPicturePath = "profile_picture"
 
+    private const val keyScore = "score"
+
     private const val keyToken = "user_token"
 
 
@@ -36,6 +38,10 @@ object ProfilePreferences {
         return getPreferences(context).getString(keyPicturePath, "") ?: ""
     }
 
+    fun getScore(context: Context): Int {
+        return getPreferences(context).getInt(keyScore, 0)
+    }
+
     fun getToken(context: Context): String {
         return getPreferences(context).getString(keyToken, "") ?: ""
     }
@@ -50,6 +56,10 @@ object ProfilePreferences {
 
     fun setProfilePic(context: Context, path: String) {
         getPreferences(context).edit().putString(keyPicturePath, path).apply()
+    }
+
+    fun setScore(context: Context, score: Int) {
+        getPreferences(context).edit().putInt(keyScore, score).apply()
     }
 
     fun setToken(context: Context, token: String) {

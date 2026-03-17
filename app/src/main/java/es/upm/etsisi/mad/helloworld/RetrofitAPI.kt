@@ -5,6 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 
 interface RetrofitAPI {
@@ -14,4 +15,7 @@ interface RetrofitAPI {
 
     @GET("ranking")
     fun getUsers(@Header("User-Token") token: String): Call<List<User>>
+
+    @PUT("user")
+    fun updateUser(@Header("User-Token") token: String, @Body data: User): Call<User>
 }

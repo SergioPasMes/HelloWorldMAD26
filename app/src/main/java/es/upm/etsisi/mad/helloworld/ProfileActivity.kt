@@ -86,6 +86,7 @@ class ProfileActivity : AppCompatActivity() {
             if (inputAlias.length in ProfilePreferences.USERNAME_MIN_LENGTH..ProfilePreferences.USERNAME_MAX_LENGTH) {
                 val currentAlias = findViewById<TextView>(R.id.userAlias)
                 currentAlias.text = inputAlias
+                UpdateManager.updateAlias(this, inputAlias)
                 ProfilePreferences.setAlias(this, inputAlias)
                 Toast.makeText(this, "Alias updated", Toast.LENGTH_SHORT).show()
             } else {
@@ -117,6 +118,7 @@ class ProfileActivity : AppCompatActivity() {
             if (inputAge != null && inputAge in ProfilePreferences.AGE_MIN..ProfilePreferences.AGE_MAX) {
                 val currentAge = findViewById<TextView>(R.id.userAge)
                 currentAge.text = stringAge
+                UpdateManager.updateAge(this, inputAge)
                 ProfilePreferences.setAge(this, inputAge)
                 Toast.makeText(this, "Age updated", Toast.LENGTH_SHORT).show()
             } else {
@@ -138,6 +140,7 @@ class ProfileActivity : AppCompatActivity() {
         val profileImages = ProfilePictureManager.getAllImages(this)
 
         ProfilePicturePickerManager(this, profileImages) { image ->
+            UpdateManager.updateProfilePicture(this, image.name)
             ProfilePreferences.setProfilePic(this, image.name)
             showCurrentProfileData()
         }.show()

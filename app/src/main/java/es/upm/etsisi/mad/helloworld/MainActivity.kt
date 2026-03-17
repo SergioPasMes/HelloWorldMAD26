@@ -42,6 +42,10 @@ class MainActivity : AppCompatActivity() {
                 showMission(location)
             }
             .onMissionCompleted {
+                val currentScore = ProfilePreferences.getScore(this)
+                val newScore = currentScore + 100
+                ProfilePreferences.setScore(this, newScore)
+                UpdateManager.updateScore(this, newScore)
                 Toast.makeText(this, R.string.mission_completion, Toast.LENGTH_SHORT).show()
             }
         locationManager = LocationActivityHelper(this)
