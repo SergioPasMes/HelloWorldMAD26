@@ -5,8 +5,9 @@ import com.google.gson.annotations.SerializedName
 data class User(
     var alias: String? = null,
     var age: Int? = null,
-    var profile_picture: String? = null,
+    @SerializedName("profile_picture")
+    var profilePicture: String? = null,
     var score: Int? = null,
     @SerializedName("user_token")
-    val user_token: String? = null
+    val userToken: String? = null
 )

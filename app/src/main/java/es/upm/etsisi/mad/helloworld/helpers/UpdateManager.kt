@@ -5,6 +5,7 @@ import android.util.Log
 import es.upm.etsisi.mad.helloworld.data.ProfilePreferences
 import es.upm.etsisi.mad.helloworld.api.RetrofitAPI
 import es.upm.etsisi.mad.helloworld.api.RetrofitInstance
+import es.upm.etsisi.mad.helloworld.api.RetrofitInstance.parseError
 import es.upm.etsisi.mad.helloworld.data.User
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,7 +31,7 @@ object UpdateManager {
     }
 
     fun updateProfilePicture(context: Context, newPicturePath: String) {
-        val updateData = User(profile_picture = newPicturePath)
+        val updateData = User(profilePicture = newPicturePath)
         sendUpdate(context, updateData, "Profile Picture")
     }
 
@@ -44,13 +45,13 @@ object UpdateManager {
                     val successResponse = response.body()
                     Log.i(TAG, "$successResponse")
                 } else {
-                    val errorResponse = response.errorBody()
-                    Log.e(TAG, "$errorResponse")
+                    val errorResponse = parseError(response)
+                    Log.e(TAG, errorResponse)
                 }
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e(TAG, "Fallo de conexión al actualizar $fieldName: ${t.message}")
+                Log.e(TAG, "Connection failure while updating $fieldName: ${t.message}")
             }
         })
     }

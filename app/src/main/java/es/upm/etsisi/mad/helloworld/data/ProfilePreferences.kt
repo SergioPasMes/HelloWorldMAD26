@@ -2,6 +2,7 @@ package es.upm.etsisi.mad.helloworld.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 object ProfilePreferences {
 
@@ -16,8 +17,11 @@ object ProfilePreferences {
     private const val keyAlias = "alias"
     private const val keyAge = "age"
     private const val keyPicturePath = "profile_picture"
-
     private const val keyScore = "score"
+
+    private const val keyLastPlantChoosen = "last_plant_chosen"
+    private const val keyCurrentPlantImage = "current_plant_image"
+
 
     private const val keyToken = "user_token"
 
@@ -64,5 +68,24 @@ object ProfilePreferences {
 
     fun setToken(context: Context, token: String) {
         getPreferences(context).edit().putString(keyToken, token).apply()
+    }
+
+    fun getLastPlantTime(context: Context): Long {
+        // Default value of 0L means that the user has never chosen a plant before.
+        return getPreferences(context).getLong(keyLastPlantChoosen, 0L)
+    }
+
+    fun setLastPlantTime(context: Context, timeInMillis: Long) {
+        getPreferences(context).edit { putLong(keyLastPlantChoosen, timeInMillis) }
+    }
+
+    fun setPlantImage(context: Context, imageUrl: String) {
+        getPreferences(context).edit {
+            putString(keyCurrentPlantImage, imageUrl)
+        }
+    }
+
+    fun getPlantImage(context: Context): String? {
+        return getPreferences(context).getString(keyCurrentPlantImage, null)
     }
 }

@@ -5,20 +5,25 @@ import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import es.upm.etsisi.mad.helloworld.activities.OpenStreetMapActivity
 import es.upm.etsisi.mad.helloworld.activities.ProfileActivity
 import es.upm.etsisi.mad.helloworld.data.ProfilePreferences
 import es.upm.etsisi.mad.helloworld.R
+import es.upm.etsisi.mad.helloworld.data.ProfilePicture
+import es.upm.etsisi.mad.helloworld.data.ProfilePictureManager
 import es.upm.etsisi.mad.helloworld.helpers.AppActivityState
 import es.upm.etsisi.mad.helloworld.helpers.LocationActivityHelper
 import es.upm.etsisi.mad.helloworld.helpers.MissionManager
 import es.upm.etsisi.mad.helloworld.helpers.NavigationActivityHelper
+import es.upm.etsisi.mad.helloworld.helpers.PlantManager
 import es.upm.etsisi.mad.helloworld.helpers.UpdateManager
 import es.upm.etsisi.mad.helloworld.helpers.unbundleAppState
 import kotlin.text.format
@@ -68,6 +73,20 @@ class MainActivity : AppCompatActivity() {
             )
         )
         welcomeTextWidget.text = welcomeTextString
+
+        val plantImageView = findViewById<ImageView>(R.id.currentPlantImageView)
+
+        val currentPlantUrl = ProfilePreferences.getPlantImage(this)
+
+        if (!currentPlantUrl.isNullOrEmpty()) {
+            Glide.with(this)
+                .load(currentPlantUrl)
+                .placeholder(R.drawable.profile_icon)
+                .error(R.drawable.profile_icon)
+                .into(plantImageView)
+        }
+
+        PlantManager.checkPlantRoutine(this)
 
         val buttonNext = findViewById<Button>(R.id.button_main_to_profile)
         buttonNext.setOnClickListener {

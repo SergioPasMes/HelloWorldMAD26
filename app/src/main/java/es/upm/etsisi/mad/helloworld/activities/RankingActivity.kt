@@ -12,6 +12,7 @@ import es.upm.etsisi.mad.helloworld.R
 import es.upm.etsisi.mad.helloworld.api.RankingAdapter
 import es.upm.etsisi.mad.helloworld.api.RetrofitAPI
 import es.upm.etsisi.mad.helloworld.api.RetrofitInstance
+import es.upm.etsisi.mad.helloworld.api.RetrofitInstance.parseError
 import es.upm.etsisi.mad.helloworld.data.User
 import es.upm.etsisi.mad.helloworld.helpers.AppActivityState
 import es.upm.etsisi.mad.helloworld.helpers.NavigationActivityHelper
@@ -50,7 +51,7 @@ class RankingActivity : AppCompatActivity() {
                     val sortedUsers = users.sortedByDescending { it.score ?: 0 }
                     recyclerView.adapter = RankingAdapter(sortedUsers)
                 } else {
-                    val errorResponse = response.errorBody()?.string()
+                    val errorResponse = parseError(response)
                     errorText.text = getString(R.string.API_error, response.code(), errorResponse)
                     errorText.visibility = View.VISIBLE
                 }

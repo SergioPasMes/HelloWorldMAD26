@@ -1,5 +1,6 @@
 package es.upm.etsisi.mad.helloworld.api
 
+import es.upm.etsisi.mad.helloworld.data.Plant
 import es.upm.etsisi.mad.helloworld.data.User
 import retrofit2.Call
 import retrofit2.http.Body
@@ -19,6 +20,6 @@ interface RetrofitAPI {
     @PUT("user")
     fun updateUser(@Header("User-Token") token: String, @Body data: User): Call<User>
 
-    //@GET("plant")
-    //fun getPlants(@Header("User-Token") token: String): Call<List<Plant>>
+    @GET("plant")
+    fun getPlants(@Header("User-Token") token: String): Call<List<Plant>>
 }

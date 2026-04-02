@@ -21,7 +21,7 @@ class APIManager {
             override fun onResponse(call: Call<User?>, response: Response<User?>) {
                 val code = response.code() // Get the code returned by the API
                 if (response.isSuccessful) {
-                    val token = response.body()?.user_token
+                    val token = response.body()?.userToken
                     if(token != null) {
                         ProfilePreferences.setToken(context, token)
                         Log.i(TAG, "$code: User data posted successfully, token saved: $token")
