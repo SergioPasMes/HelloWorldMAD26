@@ -1,7 +1,11 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.helpers
 
 import android.content.Context
 import android.util.Log
+import es.upm.etsisi.mad.helloworld.data.ProfilePreferences
+import es.upm.etsisi.mad.helloworld.api.RetrofitAPI
+import es.upm.etsisi.mad.helloworld.api.RetrofitInstance
+import es.upm.etsisi.mad.helloworld.data.User
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

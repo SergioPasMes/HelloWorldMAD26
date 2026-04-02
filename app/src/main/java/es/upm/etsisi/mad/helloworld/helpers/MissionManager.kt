@@ -1,4 +1,4 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.helpers
 
 import android.location.Location
 import kotlin.math.PI
@@ -48,8 +48,8 @@ class MissionManager {
         val radiusInDegrees = maxRadiusMeters / 111320.0 // 1 degree of latitude is roughly 111,320 meters
 
         // Use sqrt(random) to ensure uniform distribution inside the circle
-        val radius = radiusInDegrees * sqrt(Random.nextDouble())
-        val theta = 2 * PI * Random.nextDouble()
+        val radius = radiusInDegrees * sqrt(Random.Default.nextDouble())
+        val theta = 2 * PI * Random.Default.nextDouble()
 
         val dest = Location(center)
         dest.latitude = center.latitude + (radius * cos(theta))

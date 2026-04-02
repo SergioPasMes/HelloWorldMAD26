@@ -1,4 +1,4 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.helpers
 
 import android.Manifest
 import android.annotation.SuppressLint

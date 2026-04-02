@@ -1,4 +1,4 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.activities
 
 import android.annotation.SuppressLint
 import android.location.Location
@@ -11,7 +11,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import es.upm.etsisi.mad.helloworld.ProfilePreferences.getAlias
+import es.upm.etsisi.mad.helloworld.activities.OpenStreetMapActivity
+import es.upm.etsisi.mad.helloworld.activities.ProfileActivity
+import es.upm.etsisi.mad.helloworld.data.ProfilePreferences
+import es.upm.etsisi.mad.helloworld.R
+import es.upm.etsisi.mad.helloworld.helpers.AppActivityState
+import es.upm.etsisi.mad.helloworld.helpers.LocationActivityHelper
+import es.upm.etsisi.mad.helloworld.helpers.MissionManager
+import es.upm.etsisi.mad.helloworld.helpers.NavigationActivityHelper
+import es.upm.etsisi.mad.helloworld.helpers.UpdateManager
+import es.upm.etsisi.mad.helloworld.helpers.unbundleAppState
+import kotlin.text.format
 
 class MainActivity : AppCompatActivity() {
     private val TAG = this::class.simpleName
@@ -52,7 +62,11 @@ class MainActivity : AppCompatActivity() {
             .onLocationUpdated { appState.location = it; missionManager.onLocationChanged(it, appState) }
 
         val welcomeTextWidget = findViewById<TextView>(R.id.mainTextView)
-        val welcomeTextString = welcomeTextWidget.text.toString().format(getAlias(this))
+        val welcomeTextString = welcomeTextWidget.text.toString().format(
+            ProfilePreferences.getAlias(
+                this
+            )
+        )
         welcomeTextWidget.text = welcomeTextString
 
         val buttonNext = findViewById<Button>(R.id.button_main_to_profile)

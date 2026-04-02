@@ -1,4 +1,4 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.data
 
 import com.google.gson.annotations.SerializedName
 

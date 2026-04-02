@@ -1,4 +1,4 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.activities
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -11,6 +11,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import es.upm.etsisi.mad.helloworld.data.ProfilePictureManager
+import es.upm.etsisi.mad.helloworld.data.ProfilePicturePickerManager
+import es.upm.etsisi.mad.helloworld.data.ProfilePreferences
+import es.upm.etsisi.mad.helloworld.R
+import es.upm.etsisi.mad.helloworld.helpers.AppActivityState
+import es.upm.etsisi.mad.helloworld.helpers.LocationActivityHelper
+import es.upm.etsisi.mad.helloworld.helpers.NavigationActivityHelper
+import es.upm.etsisi.mad.helloworld.helpers.UpdateManager
+import es.upm.etsisi.mad.helloworld.helpers.unbundleAppState
 
 class ProfileActivity : AppCompatActivity() {
     val TAG = this::class.simpleName

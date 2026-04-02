@@ -1,4 +1,4 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.activities
 
 import android.os.Bundle
 import android.view.View
@@ -7,6 +7,15 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import es.upm.etsisi.mad.helloworld.data.ProfilePreferences
+import es.upm.etsisi.mad.helloworld.R
+import es.upm.etsisi.mad.helloworld.api.RankingAdapter
+import es.upm.etsisi.mad.helloworld.api.RetrofitAPI
+import es.upm.etsisi.mad.helloworld.api.RetrofitInstance
+import es.upm.etsisi.mad.helloworld.data.User
+import es.upm.etsisi.mad.helloworld.helpers.AppActivityState
+import es.upm.etsisi.mad.helloworld.helpers.NavigationActivityHelper
+import es.upm.etsisi.mad.helloworld.helpers.unbundleAppState
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -1,8 +1,13 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.helpers
 
 import android.content.Context
 import android.util.Log
+import es.upm.etsisi.mad.helloworld.data.ProfilePreferences
+import es.upm.etsisi.mad.helloworld.api.RetrofitAPI
+import es.upm.etsisi.mad.helloworld.api.RetrofitInstance
+import es.upm.etsisi.mad.helloworld.data.User
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 class APIManager {
@@ -12,7 +17,7 @@ class APIManager {
         val call = retrofitAPI.createPost(user)
         val TAG = "APIPost"
 
-        call?.enqueue(object : retrofit2.Callback<User?> {
+        call?.enqueue(object : Callback<User?> {
             override fun onResponse(call: Call<User?>, response: Response<User?>) {
                 val code = response.code() // Get the code returned by the API
                 if (response.isSuccessful) {

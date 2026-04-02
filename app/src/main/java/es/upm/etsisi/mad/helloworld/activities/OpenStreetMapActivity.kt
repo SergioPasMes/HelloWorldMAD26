@@ -1,22 +1,28 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.activities
 
 import android.content.Context
+import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import es.upm.etsisi.mad.helloworld.R
+import es.upm.etsisi.mad.helloworld.helpers.AppActivityState
+import es.upm.etsisi.mad.helloworld.helpers.LocationActivityHelper
+import es.upm.etsisi.mad.helloworld.helpers.MissionManager
+import es.upm.etsisi.mad.helloworld.helpers.NavigationActivityHelper
+import es.upm.etsisi.mad.helloworld.helpers.unbundleAppState
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
-import android.graphics.drawable.BitmapDrawable
-import androidx.core.content.ContextCompat
 import org.osmdroid.views.overlay.Polyline
-import android.widget.Toast
 
 class OpenStreetMapActivity : AppCompatActivity() {
     private val TAG = this::class.simpleName

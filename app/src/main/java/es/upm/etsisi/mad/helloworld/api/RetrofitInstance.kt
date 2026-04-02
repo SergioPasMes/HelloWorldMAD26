@@ -1,4 +1,4 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.api
 
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit

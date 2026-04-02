@@ -1,12 +1,14 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.api
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import es.upm.etsisi.mad.helloworld.data.ProfilePictureManager
+import es.upm.etsisi.mad.helloworld.R
+import es.upm.etsisi.mad.helloworld.data.User
 
 class RankingAdapter(private val userList: List<User>) : RecyclerView.Adapter<RankingAdapter.RankingViewHolder>() {
 

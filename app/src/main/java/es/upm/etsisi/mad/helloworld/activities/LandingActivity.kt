@@ -1,4 +1,4 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +12,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import es.upm.etsisi.mad.helloworld.activities.MainActivity
+import es.upm.etsisi.mad.helloworld.data.ProfilePicture
+import es.upm.etsisi.mad.helloworld.data.ProfilePictureManager
+import es.upm.etsisi.mad.helloworld.data.ProfilePicturePickerManager
+import es.upm.etsisi.mad.helloworld.data.ProfilePreferences
+import es.upm.etsisi.mad.helloworld.R
+import es.upm.etsisi.mad.helloworld.data.User
+import es.upm.etsisi.mad.helloworld.helpers.APIManager
+import kotlin.text.format
 
 class LandingActivity : AppCompatActivity() {
     private val TAG = this::class.simpleName
@@ -97,7 +106,7 @@ class LandingActivity : AppCompatActivity() {
             ProfilePreferences.setAge(this, age!!)
             currentPfp?.let {
                 ProfilePreferences.setProfilePic(this, it.name)
-                val user = User( username, age, it.name)
+                val user = User(username, age, it.name)
                 APIManager().postUserData(this, user, onSuccess = {
                     Toast.makeText(
                         this,
