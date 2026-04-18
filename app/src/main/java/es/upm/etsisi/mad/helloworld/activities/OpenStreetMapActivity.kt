@@ -52,10 +52,8 @@ class OpenStreetMapActivity : AppCompatActivity() {
 
         appState = intent.unbundleAppState()
         missionManager = MissionManager()
-            .onMissionCompleted {
-                Toast.makeText(this, getString(R.string.mission_completion), Toast.LENGTH_LONG).show()
-                appState.currentMission = null
-                Log.i(TAG, "User reached destination. Mission cleared.")
+            .onMissionCompleted { manager, mission ->
+                manager.completeMission(this, mission)
                 navigationManager.transitionTo(MainActivity::class.java) // When reached, we go back to MainActivity.
             }
 
@@ -137,6 +135,6 @@ class OpenStreetMapActivity : AppCompatActivity() {
         map.invalidate()
 
         // Destination Check
-        missionManager.onLocationChanged(location, appState)
+        missionManager.onLocationChanged(location, this, appState)
     }
 }
