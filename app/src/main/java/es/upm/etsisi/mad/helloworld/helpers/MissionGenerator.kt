@@ -32,6 +32,8 @@ class MissionGenerator {
         context: Context, currentLocation: Location,
         onMissionGenerated: (Mission) -> Unit, onFailure: ((String?) -> Unit)?
     ) {
+        state = GeneratorState.GENERATING
+
         val plant = ProfilePreferences.getPlant(context)
         val mainNecessity = plant?.mainNecessity
         if(mainNecessity == null) {
@@ -42,8 +44,8 @@ class MissionGenerator {
         }
         APIManager().getMission(
             context, mainNecessity, currentLocation.latitude, currentLocation.longitude,
-            onSuccess = onMissionGenerated,
-            onError = { e -> onFailure?.invoke(e) }
+            onSuccess = { onMissionGenerated(it); state = GeneratorState.IDLE } ,
+            onError = { e -> onFailure?.invoke(e); state = GeneratorState.IDLE }
         )
     }
 }
