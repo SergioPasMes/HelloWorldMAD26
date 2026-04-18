@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HelloWorld</string>
+    <string name="app_name">BioBond</string>
 
     <string name="landing_activity_header">Welcome to %1s!</string>
     <string name="landing_activity_profile_create_message">Complete your profile to get started.</string>
