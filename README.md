@@ -1,4 +1,4 @@
-# HelloWorldMAD26
+# BioBond
 
 ## Members
 - Sergio Pastor Mesas (bt0385) ([GitHub](https://github.com/bt0385))
@@ -14,12 +14,44 @@ Sharepoint:
 - Tracking: https://upm365.sharepoint.com/sites/MAD26GS/SitePages/Tracking.aspx
 
 ## Description
-This repository contains a basic Android app, which contains three Activities
-and a basic navigation system to switch between them. The code is based on
-Android Studio's "Empty Views Activity" template.
+BioBond is an app that encourages users to go out and discover new places.
+By gamifying the act of walking, it empowers user to explore their home city.
 
-The objective of this repository is to act as a foundation for further
-application development.
+## Screenshots of the App
+
+| ![App view](readme/LandingActivity.jpeg "Landing activity") | ![App view](readme/MainActivity.png "Main activity") | ![App view](readme/OpenStreetMapActivity.png "OpenStreetMaps activity") | ![App view](readme/ProfileActivity.jpeg "Profile activity") | ![App view](readme/RankingActivity.png "Third activity") |
+|:-----------------------------------------------------------:|:----------------------------------------------------:|:-----------------------------------------------------------------------:|:-----------------------------------------------------------:|:--------------------------------------------------------:|
+|                     *Landing Activity*                      |                   *Main Activity*                    |                        *OpenStreetMaps Activity*                        |                     *Profile Activity*                      |                    *Ranking Activity*                    |
+
+## Demo video
+[Click here](https://upm365-my.sharepoint.com/:v:/g/personal/sergio_pastor_alumnos_upm_es/IQBRL6zR2-ZRQq4iCjdHVVhAAe-M0jumzLC_r58ICXSyqJY?e=LTUDQd&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
+
+## Features
+- Persistence in SharedPreferences.
+- Persistence in remote backend.
+- Custom REST [API](https://www.openapiviewer.com/view/2026-04-18T17-30-13-960Z--4648a80435f8ee8b1e3322febb09f3aac772554786bf26a1a19d120e467db09b--api-spec-yaml#?route=overview).
+- OpenStreetMap maps.
+- Side navigation menu.
+- GPS location.
+- Remote image loading with Glide.
+
+## How to use
+### App
+To use the BioBond app, follow these instructions:
+1. Install the app.
+2. Create an account. Choose a username and profile picture.
+3. Choose one of the three plants offered. The type of plant you choose will influence what type of missions you get.
+4. The app will automatically generate a random mission, if you go to that location, you'll earn some points.
+
+You can check the global rankings, as well as edit your profile at any time by swiping left and opening the navigation menu.
+
+### API server
+To run your own instance of the API server, you must do the following:
+1. Clone the BioBond repository.
+2. Install Python and the required dependencies (see [`pyproject.toml`](https://github.com/bt0385/HelloWorldMAD26/blob/68778423bab6b56f201ed2caecb8ac979a820e97/server/pyproject.toml#L15-L22))
+3. Start the server by running `python src/main.py --db {DB_PATH}` from the `server/` directory.
+
+To instruct the app to use your custom server, modify the `BASE_URL` variable in [`RetrofitInstance`](https://github.com/bt0385/HelloWorldMAD26/blob/68778423bab6b56f201ed2caecb8ac979a820e97/app/src/main/java/es/upm/etsisi/mad/helloworld/api/RetrofitInstance.kt#L12).
 
 ## Changelog
 
@@ -73,8 +105,10 @@ Related pull requests:
 - [#20](https://github.com/bt0385/HelloWorldMAD26/pull/20) Refactor location, navigation and permission systems into helper classes
 - [#21](https://github.com/bt0385/HelloWorldMAD26/pull/21) Merge week 5 changes to master
 
-## Screenshots of the App
-
-| ![App view](readme/LandingActivity.jpeg "Landing activity") | ![App view](readme/MainActivity.png "Main activity") | ![App view](readme/OpenStreetMapActivity.png "OpenStreetMaps activity") | ![App view](readme/ProfileActivity.jpeg "Profile activity") | ![App view](readme/RankingActivity.png "Third activity") |
-|:-----------------------------------------------------------:|:----------------------------------------------------:|:-----------------------------------------------------------------------:|:-----------------------------------------------------------:|:--------------------------------------------------------:|
-|                     *Landing Activity*                      |                   *Main Activity*                    |                        *OpenStreetMaps Activity*                        |                     *Profile Activity*                      |                    *Ranking Activity*                    |
+### Final version ([release](https://github.com/bt0385/HelloWorldMAD26/releases/tag/final))
+Implemented the following changes:
+- Implemented server API.
+  - Keeps track of user accounts.
+  - Allows viewing and updating global rankings.
+  - Implemented plant system with different necessities.
+  - Updated mission generation system.
