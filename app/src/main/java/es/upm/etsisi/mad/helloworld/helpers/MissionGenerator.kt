@@ -26,10 +26,10 @@ class MissionGenerator {
      * Enqueues the generation of a new mission, executing the `onMissionGenerated` callback when
      * the mission is generated. In case of an error `onFailure` is called.
      *
-     * While this method is running, use `isMissionReady` to check if the method has finished.
+     * While this method is running, use `isMissionGenerating` to check if the method has finished.
      */
     fun generateMission(
-        context: Context, currrentLocation: Location,
+        context: Context, currentLocation: Location,
         onMissionGenerated: (Mission) -> Unit, onFailure: ((String?) -> Unit)?
     ) {
         val plant = ProfilePreferences.getPlant(context)
@@ -41,7 +41,7 @@ class MissionGenerator {
             return
         }
         APIManager().getMission(
-            context, mainNecessity, currrentLocation.latitude, currrentLocation.longitude,
+            context, mainNecessity, currentLocation.latitude, currentLocation.longitude,
             onSuccess = onMissionGenerated,
             onError = { e -> onFailure?.invoke(e) }
         )
