@@ -1,13 +1,14 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.helpers
 
-import android.content.Context
 import android.location.Location
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-
+import es.upm.etsisi.mad.helloworld.helpers.PermissionManager
+import es.upm.etsisi.mad.helloworld.R
+import es.upm.etsisi.mad.helloworld.helpers.UserLocationManager
 
 /**
  * Common code for activities which interact with the device's location.
@@ -34,7 +35,7 @@ class LocationActivityHelper: DefaultLifecycleObserver {
             .locationProvider(UserLocationManager.ProviderType.FUSED)
 
         PermissionManager()
-            .permissions(UserLocationManager.REQUIRED_LOCATION_PERMISSIONS.asIterable())
+            .permissions(UserLocationManager.Companion.REQUIRED_LOCATION_PERMISSIONS.asIterable())
             .onPermissionDenied { showPermissionErrorMessage() }
             .onPermissionGranted { locationManager.start(activity) }
             .request(activity)

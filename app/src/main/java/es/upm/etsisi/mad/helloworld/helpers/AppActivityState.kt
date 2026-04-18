@@ -1,10 +1,10 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.helpers
 
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
-import android.os.Parcel
 import android.os.Parcelable
+import es.upm.etsisi.mad.helloworld.data.Mission
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -23,7 +23,7 @@ class AppActivityState(
     /**
      * Current mission's location.
      */
-    var currentMission: Location? = null
+    var currentMission: Mission? = null
 ) : Parcelable {
 
     companion object {

@@ -1,4 +1,4 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.helpers
 
 import android.content.Intent
 import android.util.Log
@@ -7,6 +7,11 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import com.google.android.material.navigation.NavigationView
+import es.upm.etsisi.mad.helloworld.activities.MainActivity
+import es.upm.etsisi.mad.helloworld.activities.OpenStreetMapActivity
+import es.upm.etsisi.mad.helloworld.activities.ProfileActivity
+import es.upm.etsisi.mad.helloworld.R
+import es.upm.etsisi.mad.helloworld.activities.RankingActivity
 
 /**
  * Common code for activities which share the common Navigation Drawer system.
@@ -43,7 +48,7 @@ class NavigationActivityHelper: DefaultLifecycleObserver {
      */
     fun transitionTo(destinationClass: Class<out AppCompatActivity>) {
         Log.i(TAG, "Transitioning to: ${destinationClass.simpleName}")
-        val intent = Intent(activity,  destinationClass)
+        val intent = Intent(activity, destinationClass)
         intent.injectAppState(state)
         activity.startActivity(intent)
         activity.finish()
@@ -54,6 +59,7 @@ class NavigationActivityHelper: DefaultLifecycleObserver {
             R.id.nav_home -> MainActivity::class.java
             R.id.nav_profile_activity -> ProfileActivity::class.java
             R.id.nav_open_street_map -> OpenStreetMapActivity::class.java
+            R.id.nav_ranking -> RankingActivity::class.java
             else -> return false
         }
 

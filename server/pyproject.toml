@@ -1,0 +1,25 @@
+[project]
+name = "api-server"
+description = "API server for Mobile App Development"
+version = "0.1.0"
+
+readme = "README.md"
+homepage = "https://github.com/bt0385/HelloWorldMAD26"
+
+authors = [
+    { name = "Sergio Pastor Mesas", email = "sergio.pastor@alumnos.upm.es" },
+    { name = "Gabriel Gutiérrez Fuentes", email = "gabrielg@gabrielg.es" },
+]
+
+requires-python = ">= 3.10"
+dependencies = [
+    "coloredlogs",
+    "flask",
+    "geopy",
+    "numpy",
+    "sqlite3",
+    "waitress",
+]
+
+[project.scripts]
+api-server = "main:main_server"

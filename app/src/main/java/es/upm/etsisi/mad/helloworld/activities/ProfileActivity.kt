@@ -1,4 +1,4 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.activities
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -11,6 +11,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import es.upm.etsisi.mad.helloworld.data.ProfilePictureManager
+import es.upm.etsisi.mad.helloworld.data.ProfilePicturePickerManager
+import es.upm.etsisi.mad.helloworld.data.ProfilePreferences
+import es.upm.etsisi.mad.helloworld.R
+import es.upm.etsisi.mad.helloworld.helpers.AppActivityState
+import es.upm.etsisi.mad.helloworld.helpers.LocationActivityHelper
+import es.upm.etsisi.mad.helloworld.helpers.NavigationActivityHelper
+import es.upm.etsisi.mad.helloworld.helpers.UpdateManager
+import es.upm.etsisi.mad.helloworld.helpers.unbundleAppState
 
 class ProfileActivity : AppCompatActivity() {
     val TAG = this::class.simpleName
@@ -87,6 +96,7 @@ class ProfileActivity : AppCompatActivity() {
             if (inputAlias.length in ProfilePreferences.USERNAME_MIN_LENGTH..ProfilePreferences.USERNAME_MAX_LENGTH) {
                 val currentAlias = findViewById<TextView>(R.id.userAlias)
                 currentAlias.text = inputAlias
+                UpdateManager.updateAlias(this, inputAlias)
                 ProfilePreferences.setAlias(this, inputAlias)
                 Toast.makeText(this, "Alias updated", Toast.LENGTH_SHORT).show()
             } else {
@@ -118,6 +128,7 @@ class ProfileActivity : AppCompatActivity() {
             if (inputAge != null && inputAge in ProfilePreferences.AGE_MIN..ProfilePreferences.AGE_MAX) {
                 val currentAge = findViewById<TextView>(R.id.userAge)
                 currentAge.text = stringAge
+                UpdateManager.updateAge(this, inputAge)
                 ProfilePreferences.setAge(this, inputAge)
                 Toast.makeText(this, "Age updated", Toast.LENGTH_SHORT).show()
             } else {
@@ -139,6 +150,7 @@ class ProfileActivity : AppCompatActivity() {
         val profileImages = ProfilePictureManager.getAllImages(this)
 
         ProfilePicturePickerManager(this, profileImages) { image ->
+            UpdateManager.updateProfilePicture(this, image.name)
             ProfilePreferences.setProfilePic(this, image.name)
             showCurrentProfileData()
         }.show()

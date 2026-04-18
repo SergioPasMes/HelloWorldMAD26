@@ -1,4 +1,4 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.data
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -76,14 +76,14 @@ class ProfilePicturePickerManager(
     fun show() {
         val dialogBuilder = AlertDialog.Builder(context)
         val layout = LayoutInflater.from(context)
-            .inflate(R.layout.alert_pfp_picker_layout, null)
+            .inflate(_root_ide_package_.es.upm.etsisi.mad.helloworld.R.layout.alert_pfp_picker_layout, null)
 
         val dialog = dialogBuilder
             .setCancelable(true)
             .setView(layout)
             .create()
 
-        val gridView = layout.findViewById<GridView>(R.id.pfp_gridview)
+        val gridView = layout.findViewById<GridView>(_root_ide_package_.es.upm.etsisi.mad.helloworld.R.id.pfp_gridview)
         // Close dialog when an image is selected.
         gridView.adapter = GridViewImageAdapter(context, imageList) { image ->
             dialog.dismiss()
@@ -97,17 +97,17 @@ class ProfilePicturePickerManager(
         context: Context,
         private val imageList: List<ProfilePicture>,
         private val onImageSelect: ((ProfilePicture) -> Unit)?
-    ): ArrayAdapter<ProfilePicture>(context, R.layout.alert_pfp_picker_image_layout, imageList) {
+    ): android.widget.ArrayAdapter<ProfilePicture>(context, _root_ide_package_.es.upm.etsisi.mad.helloworld.R.layout.alert_pfp_picker_image_layout, imageList) {
 
         private val inflater = LayoutInflater.from(context)
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val image = imageList[position]
 
-            val layout = convertView ?: inflater.inflate(R.layout.alert_pfp_picker_image_layout, null)
+            val layout = convertView ?: inflater.inflate(_root_ide_package_.es.upm.etsisi.mad.helloworld.R.layout.alert_pfp_picker_image_layout, null)
             layout.setOnClickListener { onImageSelect?.invoke(image) }
 
-            val imageView = layout.findViewById<ImageView>(R.id.pfp_imageview)
+            val imageView = layout.findViewById<ImageView>(_root_ide_package_.es.upm.etsisi.mad.helloworld.R.id.pfp_imageview)
             imageView.setImageBitmap(image.toBitmap())
 
             return layout

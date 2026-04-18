@@ -1,22 +1,28 @@
-package es.upm.etsisi.mad.helloworld
+package es.upm.etsisi.mad.helloworld.activities
 
 import android.content.Context
+import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import es.upm.etsisi.mad.helloworld.R
+import es.upm.etsisi.mad.helloworld.helpers.AppActivityState
+import es.upm.etsisi.mad.helloworld.helpers.LocationActivityHelper
+import es.upm.etsisi.mad.helloworld.helpers.MissionManager
+import es.upm.etsisi.mad.helloworld.helpers.NavigationActivityHelper
+import es.upm.etsisi.mad.helloworld.helpers.unbundleAppState
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
-import android.graphics.drawable.BitmapDrawable
-import androidx.core.content.ContextCompat
 import org.osmdroid.views.overlay.Polyline
-import android.widget.Toast
 
 class OpenStreetMapActivity : AppCompatActivity() {
     private val TAG = this::class.simpleName
@@ -29,27 +35,7 @@ class OpenStreetMapActivity : AppCompatActivity() {
     private var userMarker: Marker? = null
     private lateinit var map: MapView
 
-    val gymkhanaCoords = listOf(
-        GeoPoint(40.38779608214728, -3.627687914352839), // Tennis
-        GeoPoint(40.38788595319803, -3.627048250272035), // Futsal outdoors
-        GeoPoint(40.3887315224542, -3.628643539758645), // Fashion and design
-        GeoPoint(40.38926842612264, -3.630067893975619), // Topos
-        GeoPoint(40.38956358584258, -3.629046081389352), // Teleco
-        GeoPoint(40.38992125672989, -3.6281366497769714), // ETSISI
-        GeoPoint(40.39037466191718, -3.6270256763598447), // Library
-        GeoPoint(40.389855884803005, -3.626782180787362) // CITSEM
-    )
-
-    val gymkhanaNames = listOf(
-        "Tennis",
-        "Futsal outdoors",
-        "Fashion and design school",
-        "Topography school",
-        "Telecommunications school",
-        "ETSISI",
-        "Library",
-        "CITSEM"
-    )
+    private lateinit var missionManager: MissionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,8 +51,14 @@ class OpenStreetMapActivity : AppCompatActivity() {
         }
 
         appState = intent.unbundleAppState()
+        missionManager = MissionManager()
+            .onMissionCompleted { manager, mission ->
+                manager.completeMission(this, mission)
+                navigationManager.transitionTo(MainActivity::class.java) // When reached, we go back to MainActivity.
+            }
+
         locationManager = LocationActivityHelper(this)
-            .onLocationUpdated { appState.location = it; onLocationChanged(it) }
+            .onLocationUpdated { appState.location = it; onUserMovement(it, appState) }
         navigationManager = NavigationActivityHelper(this, R.id.nav_view, appState)
             .onBackPressed { navigationManager.transitionTo(MainActivity::class.java) }
 
@@ -88,12 +80,6 @@ class OpenStreetMapActivity : AppCompatActivity() {
         map.setMultiTouchControls(true)
         map.controller.setZoom(15.0)
         map.controller.setCenter(startPoint)
-
-
-        //Add list of markers
-        addGymkhanaMarkers(map, gymkhanaCoords, gymkhanaNames, this)
-        addRouteMarkers(map, gymkhanaCoords, gymkhanaNames, this)
-        map.controller.setZoom(18.0)
 
         appState.currentMission?.let { missionDestination ->
             val missionPoint = GeoPoint(missionDestination.latitude, missionDestination.longitude)
@@ -135,7 +121,7 @@ class OpenStreetMapActivity : AppCompatActivity() {
         map.overlays.add(polyline)
     }
 
-    fun onLocationChanged(location: Location) {
+    fun onUserMovement(location: Location, appState: AppActivityState) {
         // We will use our plant icon to indicate the user movement position
         val userPoint = GeoPoint(location.latitude, location.longitude)
         if (userMarker == null) {
@@ -149,15 +135,6 @@ class OpenStreetMapActivity : AppCompatActivity() {
         map.invalidate()
 
         // Destination Check
-        appState.currentMission?.let { mission ->
-            val distance = location.distanceTo(mission)
-            if (distance <= 50f) {
-                Toast.makeText(this, getString(R.string.mission_completion), Toast.LENGTH_LONG).show()
-                appState.currentMission = null
-                Toast.makeText(this, getString(R.string.mission_completion), Toast.LENGTH_LONG).show()
-                Log.i(TAG, "User reached destination. Mission cleared.")
-                navigationManager.transitionTo(MainActivity::class.java) // When reached, we go back to MainActivity.
-            }
-        }
+        missionManager.onLocationChanged(location, this, appState)
     }
 }
