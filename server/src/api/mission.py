@@ -65,9 +65,9 @@ def mission_get():
 
 	# If there are no nearby locations, choose the closest one.
 	if not nearby_locations:
-		sorted_locations = LOCATIONS.sorted(key=lambda l: user_location.distance_meters_to(l.point))
+		sorted_locations = sorted(LOCATIONS, key=lambda l: user_location.distance_meters_to(l.point))
 		nearby_locations = [sorted_locations[0]]
-		log.debug(f"No nearby locations, defaulting to closest: {nearby_locations[0].name:.3}")
+		log.debug(f"No nearby locations, defaulting to closest: {nearby_locations[0].name}")
 
 
 	# Roll a dice, filter by necessity if needed.
