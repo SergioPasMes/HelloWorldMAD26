@@ -37,28 +37,6 @@ class OpenStreetMapActivity : AppCompatActivity() {
 
     private lateinit var missionManager: MissionManager
 
-    val gymkhanaCoords = listOf(
-        GeoPoint(40.38779608214728, -3.627687914352839), // Tennis
-        GeoPoint(40.38788595319803, -3.627048250272035), // Futsal outdoors
-        GeoPoint(40.3887315224542, -3.628643539758645), // Fashion and design
-        GeoPoint(40.38926842612264, -3.630067893975619), // Topos
-        GeoPoint(40.38956358584258, -3.629046081389352), // Teleco
-        GeoPoint(40.38992125672989, -3.6281366497769714), // ETSISI
-        GeoPoint(40.39037466191718, -3.6270256763598447), // Library
-        GeoPoint(40.389855884803005, -3.626782180787362) // CITSEM
-    )
-
-    val gymkhanaNames = listOf(
-        "Tennis",
-        "Futsal outdoors",
-        "Fashion and design school",
-        "Topography school",
-        "Telecommunications school",
-        "ETSISI",
-        "Library",
-        "CITSEM"
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -104,12 +82,6 @@ class OpenStreetMapActivity : AppCompatActivity() {
         map.setMultiTouchControls(true)
         map.controller.setZoom(15.0)
         map.controller.setCenter(startPoint)
-
-
-        //Add list of markers
-        addGymkhanaMarkers(map, gymkhanaCoords, gymkhanaNames, this)
-        addRouteMarkers(map, gymkhanaCoords, gymkhanaNames, this)
-        map.controller.setZoom(18.0)
 
         appState.currentMission?.let { missionDestination ->
             val missionPoint = GeoPoint(missionDestination.latitude, missionDestination.longitude)
