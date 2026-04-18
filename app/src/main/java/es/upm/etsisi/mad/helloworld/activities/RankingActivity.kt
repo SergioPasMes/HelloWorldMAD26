@@ -35,6 +35,7 @@ class RankingActivity : AppCompatActivity() {
 
         appState = intent.unbundleAppState()
         navigationManager = NavigationActivityHelper(this, R.id.nav_view, appState)
+            .onBackPressed { navigationManager.transitionTo(MainActivity::class.java) }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
