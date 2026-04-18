@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
         val plantImageView = findViewById<ImageView>(R.id.currentPlantImageView)
 
-        val currentPlantUrl = ProfilePreferences.getPlantImage(this)
+        val currentPlantUrl = ProfilePreferences.getPlant(this)?.picture
 
         if (!currentPlantUrl.isNullOrEmpty()) {
             Glide.with(this)

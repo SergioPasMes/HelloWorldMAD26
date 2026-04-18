@@ -20,7 +20,7 @@ object ProfilePreferences {
     private const val keyScore = "score"
 
     private const val keyLastPlantChoosen = "last_plant_chosen"
-    private const val keyCurrentPlantImage = "current_plant_image"
+    private const val keyCurrentPlantBase = "current_plant_"
 
 
     private const val keyToken = "user_token"
@@ -79,13 +79,30 @@ object ProfilePreferences {
         getPreferences(context).edit { putLong(keyLastPlantChoosen, timeInMillis) }
     }
 
-    fun setPlantImage(context: Context, imageUrl: String) {
+
+    fun setPlant(context: Context, plant: Plant) {
         getPreferences(context).edit {
-            putString(keyCurrentPlantImage, imageUrl)
+            putString("${keyCurrentPlantBase}Name", plant.name)
+            putString("${keyCurrentPlantBase}MainNecessity", plant.mainNecessity)
+            putString("${keyCurrentPlantBase}Picture", plant.picture)
         }
     }
 
-    fun getPlantImage(context: Context): String? {
-        return getPreferences(context).getString(keyCurrentPlantImage, null)
+    fun getPlant(context: Context): Plant? {
+        val preferences = getPreferences(context)
+
+        val name = preferences.getString("${keyCurrentPlantBase}Name", null)
+        val necessity = preferences.getString("${keyCurrentPlantBase}MainNecessity", null)
+        val picture = preferences.getString("${keyCurrentPlantBase}Picture", null)
+
+        if(name == null || necessity == null || picture == null) {
+            return null
+        }
+
+        return Plant(
+            name,
+            picture,
+            necessity
+        )
     }
 }
