@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HelloWorld</string>
+    <string name="app_name">BioBond</string>
 
     <string name="landing_activity_header">Welcome to %1s!</string>
     <string name="landing_activity_profile_create_message">Complete your profile to get started.</string>
@@ -26,7 +26,7 @@
     <string name="mission_marker">CURRENT MISSION</string>
     <string name="mission_label">Current Mission</string>
     <string name="mission_loading">Loading Mission …</string>
-    <string name="mission_destination">Go to: Lat %1$s, Lon %2$s</string>
+    <string name="mission_destination">Go to: %1$s</string>
     <string name="mission_completion">Mission completed!</string>
 
     <string name="drawer_menu_home_shortcut">Home</string>

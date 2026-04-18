@@ -17,6 +17,7 @@ import es.upm.etsisi.mad.helloworld.activities.OpenStreetMapActivity
 import es.upm.etsisi.mad.helloworld.activities.ProfileActivity
 import es.upm.etsisi.mad.helloworld.data.ProfilePreferences
 import es.upm.etsisi.mad.helloworld.R
+import es.upm.etsisi.mad.helloworld.data.Mission
 import es.upm.etsisi.mad.helloworld.data.ProfilePicture
 import es.upm.etsisi.mad.helloworld.data.ProfilePictureManager
 import es.upm.etsisi.mad.helloworld.helpers.AppActivityState
@@ -53,18 +54,10 @@ class MainActivity : AppCompatActivity() {
         appState = intent.unbundleAppState()
         navigationManager = NavigationActivityHelper(this, R.id.nav_view, appState)
         missionManager = MissionManager()
-            .onMissionGenerated { location ->
-                showMission(location)
-            }
-            .onMissionCompleted {
-                val currentScore = ProfilePreferences.getScore(this)
-                val newScore = currentScore + 100
-                ProfilePreferences.setScore(this, newScore)
-                UpdateManager.updateScore(this, newScore)
-                Toast.makeText(this, R.string.mission_completion, Toast.LENGTH_SHORT).show()
-            }
+            .onMissionGenerated { showMission(it) }
+            .onMissionCompleted { manager, mission -> manager.completeMission(this, mission) }
         locationManager = LocationActivityHelper(this)
-            .onLocationUpdated { appState.location = it; missionManager.onLocationChanged(it, appState) }
+            .onLocationUpdated { appState.location = it; missionManager.onLocationChanged(it, this, appState) }
 
         val welcomeTextWidget = findViewById<TextView>(R.id.mainTextView)
         val welcomeTextString = welcomeTextWidget.text.toString().format(
@@ -76,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 
         val plantImageView = findViewById<ImageView>(R.id.currentPlantImageView)
 
-        val currentPlantUrl = ProfilePreferences.getPlantImage(this)
+        val currentPlantUrl = ProfilePreferences.getPlant(this)?.picture
 
         if (!currentPlantUrl.isNullOrEmpty()) {
             Glide.with(this)
@@ -105,11 +98,11 @@ class MainActivity : AppCompatActivity() {
      * Updates the activity to show the current mission's location.
      */
     @SuppressLint("DefaultLocale")
-    private fun showMission(missionLocation: Location) {
-        val mission: TextView = findViewById(R.id.missionObjective)
-        val formattedLatitude = String.format("%.4f", missionLocation.latitude)
-        val formattedLongitude = String.format("%.4f", missionLocation.longitude)
-        mission.text = getString(R.string.mission_destination, formattedLatitude, formattedLongitude)
+    private fun showMission(mission: Mission) {
+        val missionText: TextView = findViewById(R.id.missionObjective)
+        val formattedLatitude = String.format("%.4f", mission.latitude)
+        val formattedLongitude = String.format("%.4f", mission.longitude)
+        missionText.text = getString(R.string.mission_destination, mission.locationName)
         Log.i(TAG, "New Mission Set: ${formattedLatitude}, ${formattedLongitude}")
     }
 }

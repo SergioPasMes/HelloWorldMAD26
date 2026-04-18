@@ -2,9 +2,12 @@ package es.upm.etsisi.mad.helloworld.helpers
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import es.upm.etsisi.mad.helloworld.data.ProfilePreferences
 import es.upm.etsisi.mad.helloworld.api.RetrofitAPI
 import es.upm.etsisi.mad.helloworld.api.RetrofitInstance
+import es.upm.etsisi.mad.helloworld.api.RetrofitInstance.parseError
+import es.upm.etsisi.mad.helloworld.data.Mission
 import es.upm.etsisi.mad.helloworld.data.User
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,5 +42,50 @@ class APIManager {
                 onError("Connection failed: ${t.message}")
             }
         })
+    }
+
+    fun getMission(
+        context: Context, mainNecessity: String, latitude: Double, longitude: Double,
+        onSuccess: (Mission) -> Unit, onError: (String?) -> Unit,
+    ) {
+        val TAG = "APIMission"
+        val token = ProfilePreferences.getToken(context)
+        val api = RetrofitInstance.getRetrofitInstance().create(RetrofitAPI::class.java)
+
+        api.getMission(token, mainNecessity, latitude, longitude)
+            .enqueue(object: Callback<Mission> {
+                override fun onResponse(call: Call<Mission>, response: Response<Mission>) {
+                    if(!response.isSuccessful || response.body() == null) {
+                        val error = parseError(response)
+                        Log.e(TAG, "Error fetching mission: $error")
+                        onError(error)
+                        return
+                    }
+
+                    val mission = response.body()
+                    if(
+                        mission == null ||
+                        mission.satisfiesNecessities == null ||
+                        mission.locationName == null ||
+                        mission.latitude == null ||
+                        mission.longitude == null
+                        )
+                    {
+                        onError(null)
+                        return
+                    }
+                    onSuccess(mission)
+                }
+
+
+                override fun onFailure(
+                    call: Call<Mission?>?,
+                    error: Throwable?
+                ) {
+                    Log.e(TAG, "Failure when fetching mission: $error")
+                    onError(error?.toString())
+                }
+            }
+        )
     }
 }

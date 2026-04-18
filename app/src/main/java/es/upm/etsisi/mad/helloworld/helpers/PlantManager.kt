@@ -85,12 +85,9 @@ object PlantManager {
 
     private fun saveSelection(activity: AppCompatActivity, plant: Plant) {
         ProfilePreferences.setLastPlantTime(activity, System.currentTimeMillis())
-
-        val imageUrl = plant.picture ?: ""
-        ProfilePreferences.setPlantImage(activity, imageUrl)
+        ProfilePreferences.setPlant(activity, plant)
 
         Toast.makeText(activity, "You chose: ${plant.name}!", Toast.LENGTH_SHORT).show()
-
         activity.recreate()
     }
 }
